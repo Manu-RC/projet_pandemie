@@ -10,15 +10,17 @@ class Universe(QtWidgets.QWidget) :
     def __init__(self,simu):
 
         super().__init__()
+        self.simu = simu
         self.length = simu.x_max
         self.height = simu.y_max
         self.setWindowTitle("test")
         # self.resize(l,h)
         self.scene = QtWidgets.QGraphicsScene()
-        # self.items = QtWidgets.QGraphicsItemGroup()
+        self.items = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(self.items)
         self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.add_rd_people)
+        self.timer.timeout.connect(self.update_people)
+        self.update_people()
         # self.add_rd_people()
         self.add_shortcut('f', lambda: self.playpause())
         
@@ -39,12 +41,12 @@ class Universe(QtWidgets.QWidget) :
 
     def update_people(self):  
         """met à jour les emplacements des individus dans la scene"""
-
+        self.simu.advance()
         self.scene.clear()
         group = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(group)
 
-        for individu in simu.population:
+        for individu in self.simu.population:
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon,individu.rayon)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
@@ -61,4 +63,17 @@ class Universe(QtWidgets.QWidget) :
         if self.timer.isActive():
             self.timer.stop()
         else:
-            self.timer.start(10)
+            self.timer.start(500)
+
+
+    def start(self):
+
+        if not self.timer.isActive():
+
+            self.timer.start(500)
+
+    def stop(self):
+
+        if self.timer.isActive():
+
+            self.timer.stop

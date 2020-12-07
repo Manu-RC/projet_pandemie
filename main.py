@@ -1,5 +1,8 @@
 from interface_graphique import Ui_Form
 from universe import Universe 
+from simulation import Simulation
+from Maladie import Maladie
+from sortie import Sortie
 import sys
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
@@ -11,11 +14,8 @@ def main():
 
     app = QtWidgets.QApplication(sys.argv)
     
-    ui = Ui_Form()
-    Form = Universe(500,500)
-    ui.setupUi(Form)
-    ui.graphicsView.setScene(Form.scene)
-    Form.show()
+    out = Sortie()
+    out.univers.show()
     sys.exit(app.exec_())
 
 
