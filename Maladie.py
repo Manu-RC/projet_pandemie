@@ -1,4 +1,9 @@
-#
+
+class Maladie : # à compléter
+
+	def __init__(self,taux_contagion):
+
+		self.taux_contagion = taux_contagion
 
 
 
@@ -15,24 +20,6 @@ def maladie_Basic(population,Taux_contagion,Durée_transmissibilité):
 		if individu.collision != None :
 			
 			Restate(individu)
-
-
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -2,19 +2,23 @@ import math
 
 class Simulation : 
 
-    def __init__(self):
+    def __init__(self,maladie,x_max,y_max):
 
         #dimensions de l'environnement
-        self.x_max = None
-        self.y_max = None
+        self.x_max = x_max
+        self.y_max = y_max
         
         self.population = []
+
+        self.maladie = maladie
         
         #horloge de la simulation 
         self.time = 0
         
         #pas de temps de la simulation
         self.time_increment = 1
+
+        
 
     def predict_for_all(self):
     
@@ -108,3 +112,6 @@ def collision(v_1,v_2):
     else:
 
         return False
+
+
+    
