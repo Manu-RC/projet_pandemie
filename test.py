@@ -82,4 +82,4 @@ def main():
     sys.exit(app.exec_())
 
 
-main()
+# main()
