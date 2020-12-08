@@ -24,7 +24,9 @@ class Individu:
         self.vx = vx
         self.vy = vy
 
-    def move(self)
+    def move(self,t):
+
+        pass
 
 
 

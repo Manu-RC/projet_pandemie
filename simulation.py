@@ -1,4 +1,6 @@
 import math
+import numpy as np
+from individu import Individu
 
 class Simulation : 
 
@@ -41,7 +43,7 @@ class Simulation :
     def predict(self, individu): #depend de comment l'interface graphique interprete la matrice (ne pas suppr)
         """renvoie les prochaines coordonnees ou donne a l'individu l'obstacle qu'il rencontre (peut etre amelioree)"""
 
-        x,y,r = individu.x + individu.v_x , individu.y + individu.y , individu.r
+        x,y,r = individu.x + individu.vx , individu.y + individu.vy , individu.rayon
     
         if x-r < 0 and 0 <= y-r <= y+r <= self.y_max : 
 
@@ -112,13 +114,15 @@ class Simulation :
         
         while sub < self.x_max and i < n :
         
-            i += 1
+            
         
             x_array[i] = np.random.uniform(radius_prime,self.y_max)
         
             y_array[i] = np.random.uniform(radius,radius+sub)
         
             radius += sub
+
+            i += 1
     
         velocity_array_x = np.random.uniform(-max(self.x_max,self.y_max)/100,max(self.x_max,self.y_max)/100,n) #Liste vecteurs vitesse
     
@@ -127,7 +131,7 @@ class Simulation :
     
         for i in range(n):
         
-            self.population.append(Individu(x_array[i],y_array[i],velocity_array_x[i],velocity_array_y[i]))
+            self.population.append(Individu(radius_prime,x_array[i],y_array[i],velocity_array_x[i],velocity_array_y[i]))
 
 
     
