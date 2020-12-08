@@ -1,4 +1,4 @@
-#import Point
+import individu
 import numpy as np
 from math import sqrt
 
@@ -33,10 +33,15 @@ def gen(longueur,hauteur,n):#Génération aléatoire des individus
 		
 		radius += sub
 	
-	velocity_array = np.random.uniform(0,max(longueur,hauteur)/100,n)
+	velocity_array_x = np.random.uniform(-max(longueur,hauteur)/100,max(longueur,hauteur)/100,n)
+	
+	velocity_array_y = np.random.uniform(-max(longueur,hauteur)/100,max(longueur,hauteur)/100,n)
+
 	
 	for i in range(n):
 		
-		population[i] = Point(x_array[i],y_array[i],velocity_array[i])
+		population[i] = Individu(x_array[i],y_array[i],velocity_array[i])
+
+		population[i].set_vitesse(velocity_array_x[i],velocity_array_y[i])
 
 	return population
