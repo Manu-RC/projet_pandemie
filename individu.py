@@ -6,7 +6,7 @@ class Individu:
     Un individu est défini par sa position (x,y), sa vitesse de déplacement et sa taille modilisé par un rayon
     """
 
-    def __init__(self, rayon, x, y, v, masse=1):
+    def __init__(self, rayon, x, y, vx, vy, masse=1): #j'ai modifié les entrees car il n'y avait pas vx et vy
         self.rayon = rayon
         self.x = x
         self.y = y
@@ -16,13 +16,15 @@ class Individu:
         self.masse = masse
         self.etat = 'sain'
 
-    def set_position(self, vx, vy, t):
-        self.x += vx * t
-        self.y += vy * t
+    def set_position(self, t):
+        self.x += self.vx * t
+        self.y += self.vy * t
 
     def set_vitesse(self,vx,vy):
         self.vx = vx
         self.vy = vy
+
+    def move(self)
 
 
 

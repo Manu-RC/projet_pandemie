@@ -16,10 +16,15 @@ class Universe(QtWidgets.QWidget) :
         self.setWindowTitle("test")
         # self.resize(l,h)
         self.scene = QtWidgets.QGraphicsScene()
-        # self.items = QtWidgets.QGraphicsItemGroup()
+        self.items = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(self.items)
         self.timer = QtCore.QTimer(self)
+
+        self.timer.timeout.connect(self.update_people)
+        self.update_people()
+
         self.timer.timeout.connect(self.simu.advance())
+
         # self.add_rd_people()
         self.add_shortcut('f', lambda: self.playpause())
         
@@ -40,7 +45,7 @@ class Universe(QtWidgets.QWidget) :
 
     def update_people(self):  
         """met à jour les emplacements des individus dans la scene"""
-
+        self.simu.advance()
         self.scene.clear()
         group = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(group)
