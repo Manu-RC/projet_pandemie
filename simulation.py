@@ -95,6 +95,54 @@ class Simulation :
 
             self.time_increment += var
 
+    def gen(self,n,radius):#Génération aléatoire des individus 
+    
+    
+        x_array = [0]*n
+    
+        y_array = [0]*n
+    
+    #Pour éviter les chevauchements lors de la génération avec contrainte d'un individu par incrément de Y
+    
+        radius_prime = radius
+        
+        sub = self.x_max//radius
+        
+        i = 0
+        
+        while sub < self.x_max and i < n :
+        
+            i += 1
+        
+            x_array[i] = np.random.uniform(radius_prime,self.y_max)
+        
+            y_array[i] = np.random.uniform(radius,radius+sub)
+        
+            radius += sub
+    
+        velocity_array_x = np.random.uniform(-max(self.x_max,self.y_max)/100,max(self.x_max,self.y_max)/100,n) #Liste vecteurs vitesse
+    
+        velocity_array_y = np.random.uniform(-max(self.x_max,self.y_max)/100,max(self.x_max,self.y_max)/100,n)
+
+    
+        for i in range(n):
+        
+            self.population.append(Individu(x_array[i],y_array[i],velocity_array_x[i],velocity_array_y[i]))
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
 def distance(v_1,v_2):
 
