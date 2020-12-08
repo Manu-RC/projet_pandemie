@@ -17,7 +17,6 @@ def main():
     out = Sortie()
 
     out.univers.show()
-    out.ui.show()
     sys.exit(app.exec_())
 
 
