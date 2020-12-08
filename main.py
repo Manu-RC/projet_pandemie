@@ -15,7 +15,9 @@ def main():
     app = QtWidgets.QApplication(sys.argv)
     
     out = Sortie()
+
     out.univers.show()
+    out.ui.show()
     sys.exit(app.exec_())
 
 

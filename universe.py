@@ -19,8 +19,12 @@ class Universe(QtWidgets.QWidget) :
         self.items = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(self.items)
         self.timer = QtCore.QTimer(self)
+
         self.timer.timeout.connect(self.update_people)
         self.update_people()
+
+        self.timer.timeout.connect(self.simu.advance())
+
         # self.add_rd_people()
         self.add_shortcut('f', lambda: self.playpause())
         
