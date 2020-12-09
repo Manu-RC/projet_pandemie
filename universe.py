@@ -14,38 +14,30 @@ class Universe(QtWidgets.QWidget) :
         self.length = simu.x_max
         self.height = simu.y_max
         self.setWindowTitle("test")
-        # self.resize(l,h)
         self.scene = QtWidgets.QGraphicsScene()
         self.items = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(self.items)
         self.timer = QtCore.QTimer(self)
 
         self.timer.timeout.connect(self.update_people)
-        self.update_people()
-
-        self.timer.timeout.connect(self.simu.advance)
-
-        # self.add_rd_people()
+        self.set_people()
         self.add_shortcut('f', lambda: self.playpause())
         
+    def set_people(self):
 
-    # def add_rd_people(self):
+        group = QtWidgets.QGraphicsItemGroup()
+        self.scene.addItem(group)
 
-    #     self.scene.clear()
-    #     group = QtWidgets.QGraphicsItemGroup()
-    #     self.scene.addItem(group)
+        for individu in self.simu.population:
 
-    #     for i in range(10):
-
-    #         rd_x = rd.uniform(10,self.length)
-    #         rd_y = rd.uniform(10,self.height) 
-    #         bounds = QtCore.QRectF(rd_x,rd_y, 10, 10)
-    #         item = QtWidgets.QGraphicsEllipseItem(bounds, group )
-    #         item.setBrush(QBrush(QColor("red")))
-
+            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon,individu.rayon)
+            item = QtWidgets.QGraphicsEllipseItem(bounds, group)
+            item.setBrush(QBrush(QColor("red")))
+    
+    
     def update_people(self):  
         """met à jour les emplacements des individus dans la scene"""
-        # self.simu.advance()
+        self.simu.advance()
         self.scene.clear()
         group = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(group)
