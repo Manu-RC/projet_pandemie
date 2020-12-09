@@ -1,25 +1,26 @@
 
 class Maladie : # à compléter
 
-	def __init__(self,taux_contagion):
+	def __init__(self,taux_contagion,muta_init):
 
 		self.taux_contagion = taux_contagion
+		self.mutabilite = muta_init
 
 
 
 
-def maladie_Basic(population,Taux_contagion,Durée_transmissibilité):
-	S =len(population)
+# def maladie_Basic(population,Taux_contagion,Durée_transmissibilité):
+# 	S =len(population)
 	
-	I = 0
+# 	I = 0
 
-	R = 0
+# 	R = 0
 
-	for individu in population :
+# 	for individu in population :
 		
-		if individu.collision != None :
+# 		if individu.collision != None :
 			
-			Restate(individu)
+# 			Restate(individu)
 
 
 
