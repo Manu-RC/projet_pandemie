@@ -28,14 +28,14 @@ class Simulation :
         predictions = [self.predict(individu) for individu in self.population]  #contient les prochaines coordonnees des individus ou None s'ils touchent déjà un mur ou un coin
         n = len(self.population)
     
-        for i in range(n):
-            for j in range(i,n): #les individus avant i ont deja ete traites
+        for i in range(n-1):
+            for j in range(i+1,n): #les individus avant i ont deja ete traites
 
                 if predictions[i] is not None and predictions[j] is not None :
                     if collision(predictions[i],predictions[j]): 
                         #on donne a chaque individu l'individu avec qui il va entrer en collision
                         individu_i = self.population[i]
-                        individu_j = self.population[i]
+                        individu_j = self.population[j]
 
                         individu_i.collision = individu_j
                         individu_j.collision = individu_i
