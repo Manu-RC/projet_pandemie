@@ -21,6 +21,11 @@ class Universe(QtWidgets.QWidget) :
 
         self.timer.timeout.connect(self.update_people)
         self.set_people()
+
+        # self.timer.timeout.connect(self.simu.advance)
+
+    
+
         self.add_shortcut('f', lambda: self.playpause())
         
     def set_people(self):
