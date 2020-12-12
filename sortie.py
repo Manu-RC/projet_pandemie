@@ -14,9 +14,9 @@ class Sortie :
         
         
         maladie = Maladie(0)
-        simulation = Simulation(maladie,900,900)
+        simulation = Simulation(maladie,500,500)
 
-        simulation.gen(100,10)
+        simulation.generation(10,10)
         self.univers = Universe(simulation)
         self.ui.setupUi(self.univers)
         self.ui.graphicsView.setScene(self.univers.scene)

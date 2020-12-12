@@ -2,6 +2,13 @@ import numpy as np
 from math import sqrt, cos, pi, sin
 
 
+def liste_nombre(n):
+    return [i for i in range(0,n-1)]
+
+def uniform(a,b):
+    """Sort un nombre compris entre a et b de manière aléatoire"""
+    return a + (b-a) * np.random.uniform(0,1)
+
 def angle_phi(ux,uy,vx,vy):
     if ux == 0 and uy == 0:
         return angle_theta(vx,vy)
@@ -26,15 +33,16 @@ def produit_scalaire(u,v):
     return np.dot(normalisation(u),normalisation(v))
 
 def vitesse(ux,uy):
-    #theta = angle_theta(ux,uy)
-    #if theta == 0:
-        #return ux / cos(theta)
-    #else:
-        #return uy / sin(theta)
     return sqrt(ux**2 + uy**2)
 
 def vecteur(ax,ay,bx,by):
     return bx - ax , by -ay
+
+def distance(cercle_1,cercle_2):
+    """ Entrée : un couple (position x, position y, rayon)
+        Sortie : un flottant """
+    return sqrt((cercle_1[0]-cercle_2[0])**2 + (cercle_1[1]-cercle_2[1])**2)
+
 
 if "__main__" == __name__:
 
