@@ -109,7 +109,7 @@ def collision(cercle1,cercle2):
 
     rayon_1 = cercle1[2]
     rayon_2 = cercle2[2]
-    if alg.distance(cercle1,cercle2) < rayon_1 + rayon_2 :
+    if alg.distance(cercle1,cercle2) < (rayon_1 + rayon_2) :
         return True
     else:
         return False
