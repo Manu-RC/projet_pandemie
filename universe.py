@@ -35,7 +35,7 @@ class Universe(QtWidgets.QWidget) :
 
         for individu in self.simu.population:
 
-            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon,individu.rayon)
+            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
             item.setBrush(QBrush(QColor("red")))
     
@@ -49,7 +49,7 @@ class Universe(QtWidgets.QWidget) :
 
         for individu in self.simu.population:
 
-            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon,individu.rayon)
+            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
             item.setBrush(QBrush(QColor("red")))  #pourra etre modifié par la suite
 

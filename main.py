@@ -15,7 +15,7 @@ def main():
     longueur = 500
     hauteur = 500
     nombre_individus = 50
-    rayon = 10
+    rayon = 5
     refresh_time = 10 #millisecondes
 
     app = QtWidgets.QApplication(sys.argv)
