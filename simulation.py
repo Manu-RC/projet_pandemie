@@ -58,6 +58,16 @@ class Simulation :
         else :
             return (x,y,r)
 
+
+    def prediction_is_valid(self,individu): 
+        """Teste si la prédiction sort ou non l'individu des limites de la simulation (plus courte que predict_for_all)"""
+        r = individu.rayon
+
+        x,y,r = individu.x + individu.vx * self.time_increment, individu.y + individu.vy * self.time_increment, individu.rayon
+
+        return  (0 <= x-r < x+r <= self.x_max) and  (0 <= y-r < y+r <= self.y_max)
+
+
     def advance(self):
         
         self.predict_for_all()
@@ -90,7 +100,7 @@ class Simulation :
         for i in range(nb_particule):
             x = int(alg.uniform(0,nb_particule-i))
             y = int(alg.uniform(0,nb_particule-i))
-            self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2)))
+            self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self))
             x_array.pop(x)
             y_array.pop(y)
 
