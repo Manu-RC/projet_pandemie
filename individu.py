@@ -31,13 +31,25 @@ class Individu:
                "------------------------ \n ".format(self.x,self.y,self.vx,self.vy,self.ax,self.ay,self.touch)
 
     def set_position(self,x,y):
+        """met à jour la position (peut être sujet à approximation)"""
         #self.x += self.vx * t
         #self.y += self.vy * t
         dt = self.simulation.time_increment
         self.x  = x + self.vx * dt #+  (self.ax * t**2) / 2
         self.y  = y + self.vy * dt #+  (self.ay * t**2) / 2
 
+    def next_position(self):
+        """renvoie la prochaine position (si tout se passe bien)"""
+        #self.x += self.vx * t
+        #self.y += self.vy * t
+        dt = self.simulation.time_increment
+        x  = self.x + self.vx * dt #+  (self.ax * t**2) / 2
+        y  = self.y + self.vy * dt #+  (self.ay * t**2) / 2
+
+        return x,y
+
     def set_vitesse(self,vx,vy):
+        """affecte un nouveau vecteur vitesse"""
         self.vx = vx
         self.vy = vy
 
