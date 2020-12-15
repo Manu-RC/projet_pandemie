@@ -31,6 +31,9 @@ class Sortie :
         #connexion des boutons start et stop
         self.ui.StartButton.clicked.connect(self.start)
         self.ui.Stopbutton.clicked.connect(self.stop)
+        
+        #connexion de la progress bar au pourcentage de personnes contaminées
+        self.ui.Barre_contamination.setValue(simulation.pourcentage_contaminées)
 
 
     def update_simu(self):  
