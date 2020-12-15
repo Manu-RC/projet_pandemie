@@ -18,7 +18,11 @@ class Simulation :
         self.time = 0
         #pas de temps de la simulation
         self.time_increment = 0.1
+        
         self.malades = 5
+        self.nombre_individus = len(self.population)
+        self.pourcentage_contaminé= (self.malades/self.nombre_individus)*100
+
 
     def predict_for_all(self):
         """prédit la position de chaque individu et crée des paires de collision si collision il y a"""
