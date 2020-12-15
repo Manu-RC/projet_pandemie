@@ -45,7 +45,12 @@ class Sortie :
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
-            item.setBrush(QtGui.QBrush(QtGui.QColor("red")))
+            if self.etat == "contaminé":
+                item.setBrush(QBrush(QColor("red")))
+            elif self.etat == "immunisé":
+                item.setBrush(QBrush(QColor("yellow")))
+            else:
+                item.setBrush(QBrush(QColor("green")))
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""
