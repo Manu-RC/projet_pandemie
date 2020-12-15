@@ -7,7 +7,7 @@ from PyQt5.QtGui import QPen, QBrush, QColor
 
 class Universe(QtWidgets.QWidget) :
 
-    def __init__(self,simu):
+    def __init__(self,simu,refresh_time):
 
         super().__init__()
         self.simu = simu
@@ -18,7 +18,7 @@ class Universe(QtWidgets.QWidget) :
         self.items = QtWidgets.QGraphicsItemGroup()
         self.scene.addItem(self.items)
         self.timer = QtCore.QTimer(self)
-
+        self.refresh_time = refresh_time
         self.timer.timeout.connect(self.update_people)
         self.set_people()
 
@@ -35,7 +35,7 @@ class Universe(QtWidgets.QWidget) :
 
         for individu in self.simu.population:
 
-            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon,individu.rayon)
+            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
             item.setBrush(QBrush(QColor("red")))
     
@@ -49,7 +49,7 @@ class Universe(QtWidgets.QWidget) :
 
         for individu in self.simu.population:
 
-            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon,individu.rayon)
+            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
             item.setBrush(QBrush(QColor("red")))  #pourra etre modifié par la suite
 
@@ -64,17 +64,17 @@ class Universe(QtWidgets.QWidget) :
         if self.timer.isActive():
             self.timer.stop()
         else:
-            self.timer.start(500)
+            self.timer.start(self.refresh_time)
 
 
     def start(self):
 
         if not self.timer.isActive():
 
-            self.timer.start(500)
+            self.timer.start(self.refresh_time)
 
     def stop(self):
 
         if self.timer.isActive():
 
-            self.timer.stop
+            self.timer.stop()

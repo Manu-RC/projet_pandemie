@@ -8,13 +8,12 @@ class Simulation :
     """ Cette classe permet la génération des différentes particules, gère les collisions entre les particules
         et les bords du domaines ; ainsi que l'avancement dans le temps de la simulation. """
 
-    def __init__(self,maladie,x_max,y_max):
+    def __init__(self,x_max,y_max):
 
         #dimensions de l'environnement
         self.x_max = x_max
         self.y_max = y_max
         self.population = []
-        self.maladie = maladie
         #horloge de la simulation 
         self.time = 0
         #pas de temps de la simulation
@@ -38,7 +37,8 @@ class Simulation :
 
     def predict(self, individu): #depend de comment l'interface graphique interprete la matrice (ne pas suppr)
         """renvoie les prochaines coordonnees ou donne a l'individu l'obstacle qu'il rencontre (peut etre amelioree)"""
-        x,y,r = individu.x + individu.vx * self.time_increment, individu.y + individu.vy * self.time_increment, individu.rayon
+        pred = individu.next_position()
+        x,y,r = pred[0],pred[1],individu.rayon
         if x-r < 0 and 0 <= y-r <= y+r <= self.y_max :
             individu.touch =  "left_wall"
         elif x+r > self.x_max and 0 <= y-r <= y+r <= self.y_max :
@@ -58,13 +58,23 @@ class Simulation :
         else :
             return (x,y,r)
 
+
+    def prediction_is_valid(self,individu): 
+        """Teste si la prédiction sort ou non l'individu des limites de la simulation (plus courte que predict_for_all)"""
+        r = individu.rayon
+
+        x,y,r = individu.x + individu.vx * self.time_increment, individu.y + individu.vy * self.time_increment, individu.rayon
+
+        return  (0 <= x-r < x+r <= self.x_max) and  (0 <= y-r < y+r <= self.y_max)
+
+
     def advance(self):
         
         self.predict_for_all()
         for individu in self.population :
-            individu.move(self.x_max,self.y_max,self.time_increment)
+            individu.move(self.x_max,self.y_max)
         self.time += self.time_increment
-        print("LE TEMPS : ", self.time)
+        # print("LE TEMPS : ", self.time)
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
@@ -90,7 +100,7 @@ class Simulation :
         for i in range(nb_particule):
             x = int(alg.uniform(0,nb_particule-i))
             y = int(alg.uniform(0,nb_particule-i))
-            self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2)))
+            self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self))
             x_array.pop(x)
             y_array.pop(y)
 
@@ -99,7 +109,7 @@ def collision(cercle1,cercle2):
 
     rayon_1 = cercle1[2]
     rayon_2 = cercle2[2]
-    if alg.distance(cercle1,cercle2) < rayon_1 + rayon_2 :
+    if alg.distance(cercle1,cercle2) < (rayon_1 + rayon_2) :
         return True
     else:
         return False

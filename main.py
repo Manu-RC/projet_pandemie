@@ -12,9 +12,15 @@ from PyQt5.QtWidgets import QApplication
         
 def main():
 
+    longueur = 500
+    hauteur = 500
+    nombre_individus = 50
+    rayon = 5
+    refresh_time = 10 #millisecondes
+
     app = QtWidgets.QApplication(sys.argv)
     
-    out = Sortie()
+    out = Sortie(longueur,hauteur,nombre_individus,rayon,refresh_time)
 
     out.univers.show()
     sys.exit(app.exec_())
