@@ -22,8 +22,7 @@ class Simulation :
         self.time_increment = 0.1
         self.malades = 5
         self.nombre_individus = len(self.population)
-        self.pourcentage_contamines= (self.malades/self.nombre_individus)*100
-
+        self.pourcentage_contamines= None
 
 
 
@@ -92,7 +91,6 @@ class Simulation :
         if self.time_increment - var > 0 :
             self.time_increment += var
 
-
     def generation(self,rayon,nb_particule,nombre_contamines):
 
         np.random.seed()
@@ -110,7 +108,6 @@ class Simulation :
         except:
             pass
         for i in range(nb_particule):
-
             if i <= nombre_contamines:
                 x = int(alg.uniform(0,nb_particule-i))
                 y = int(alg.uniform(0,nb_particule-i))
@@ -123,8 +120,8 @@ class Simulation :
                 self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self))
                 x_array.pop(x)
                 y_array.pop(y)
-
-
+        self.malades = nombre_contamines
+        self.pourcentage_contamines = (self.malades/self.nombre_individus)*100
 
 def collision(cercle1,cercle2):
 
