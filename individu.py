@@ -18,7 +18,7 @@ class Individu:
         self.simulation = simulation
         self.touch = None
         self.masse = masse
-        self.etat = 'sain'
+        self.etat = "Sain"
         self.maladie = maladie
         
     def __repr__(self):
