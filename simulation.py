@@ -2,6 +2,7 @@ import numpy as np
 from individu import Individu
 import physique
 import algebre as alg
+from Maladie import Maladie
 
 
 class Simulation :
@@ -20,8 +21,10 @@ class Simulation :
         self.time = 0
         #pas de temps de la simulation
         self.time_increment = 0.1
-        self.malades = 5
-        self.nombre_individus = len(self.population)
+        self.morts = 0
+        self.sains = 0
+        self.infectes = 0
+        self.immunise = 0
         self.pourcentage_contamines= None
 
 
@@ -78,11 +81,11 @@ class Simulation :
     def advance(self):
         
         self.predict_for_all()
+        self.Restate_for_all()
         for individu in self.population :
             individu.move(self.x_max,self.y_max)
         self.time += self.time_increment
 
-        self.malades +=1
 
 
 
@@ -108,10 +111,12 @@ class Simulation :
         except:
             pass
         for i in range(nb_particule):
-            if i <= nombre_contamines:
+            if i < nombre_contamines:
                 x = int(alg.uniform(0,nb_particule-i))
                 y = int(alg.uniform(0,nb_particule-i))
-                self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self,self.maladie_init))
+                individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self,self.maladie_init)
+                individu.etat = "Infecte"
+                self.population.append(individu)
                 x_array.pop(x)
                 y_array.pop(y)
             else:
@@ -120,8 +125,54 @@ class Simulation :
                 self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self))
                 x_array.pop(x)
                 y_array.pop(y)
-        self.malades = nombre_contamines
-        self.pourcentage_contamines = (self.malades/self.nombre_individus)*100
+        self.infectes = nombre_contamines
+        self.sains = len(self.population)-self.infectes
+        self.pourcentage_contamines = (self.infectes/len(self.population))*100
+        
+    def Restate_for_all(self):
+        
+        for individu in self.population:
+            if type(individu.touch) != str and individu.touch is not None :
+                self.Restate(individu)
+            elif individu.touch is None :
+                if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
+                    individu.etat = "Immunise"
+                    individu.hit_time = 0
+                    self.immunise +=1
+                    self.sains +=1
+                    self.infectes-=1
+
+
+
+    def Restate(self,individu):
+        
+        if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
+            State = np.random.binomial(1,individu.touch.maladie.Taux_contagion)
+            if State == 1 :
+                maladie = individu.touch.maladie
+                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite)
+                individu.etat = "Infecte"
+                self.sains -= 1
+                self.infectes += 1
+
+	    # if individu.etat == "Sain" and individu.collision.etat == "Rétabli" :#Durée de la période de contagion dans l'attribut collision
+		#     State = np.random.binomial(1,individu.Maladie.Taux_contagion)
+		#     hit_timeframe = individu.simulation.time - individu.collision.Maladie.hit_time
+		
+		#     if State == 1 and hit_timeframe <= individu.Maladie.Durée_transmissibilité and hit_timeframe != individu.simulation.time :
+        #         individu.etat = "Infécté"
+        #         individu.hit_time = Simulation.time
+        #         self.sains-=1
+        #         self.infectes +=1
+        elif individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
+            individu.etat = "Immunise"
+            individu.hit_time = 0
+            self.immunise +=1
+            self.sains +=1
+            self.infectes-=1
+
+	    # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
+        #     individu.Maladie.hit_time = Simulation.time
 
 def collision(cercle1,cercle2):
 

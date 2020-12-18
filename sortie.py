@@ -22,6 +22,7 @@ class Sortie :
         self.univers = Universe(self.simulation,refresh_time)
         self.ui.setupUi(self.univers)
         self.ui.graphicsView.setScene(self.univers.scene)
+        self.set_simu()
 
 
         
@@ -36,12 +37,8 @@ class Sortie :
         #connexion de la progress bar au pourcentage de personnes contaminées
         self.ui.Barre_contamination.setValue(self.simulation.pourcentage_contamines)
 
+    def set_simu(self):
 
-    def update_simu(self):  
-        """met à jour visuellement les différents états de la simulation """
-        self.simulation.advance()
-        self.univers.scene.clear()
-        self.ui.Compteur_malades.display(self.simulation.malades)
         group = QtWidgets.QGraphicsItemGroup()
         self.univers.scene.addItem(group)
 
@@ -49,9 +46,31 @@ class Sortie :
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
-            if individu.etat == "contaminé":
+            if individu.etat == "Infecte":
                 item.setBrush(QtGui.QBrush(QtGui.QColor("red")))
-            elif individu.etat == "immunisé":
+            elif individu.etat == "Immunise":
+                item.setBrush(QtGui.QBrush(QtGui.QColor("yellow")))
+            else:
+                item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
+
+    def update_simu(self):  
+        """met à jour visuellement les différents états de la simulation """
+        self.simulation.advance()
+        self.univers.scene.clear()
+        self.ui.Compteur_malades.display(self.simulation.infectes)
+        self.ui.Compteur_morts.display(self.simulation.morts)
+        self.ui.Compteur_pop_saine.display(self.simulation.sains)
+        self.ui.Compteur_pop_totale.display(len(self.simulation.population))
+        group = QtWidgets.QGraphicsItemGroup()
+        self.univers.scene.addItem(group)
+
+        for individu in self.simulation.population:
+
+            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
+            item = QtWidgets.QGraphicsEllipseItem(bounds, group)
+            if individu.etat == "Infecte":
+                item.setBrush(QtGui.QBrush(QtGui.QColor("red")))
+            elif individu.etat == "Immunise":
                 item.setBrush(QtGui.QBrush(QtGui.QColor("yellow")))
             else:
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
