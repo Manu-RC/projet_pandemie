@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Maladie:
 
 	def __init__(self,hit_time,Taux_contagion,muta_init,Duree_transmissibilite):
@@ -19,7 +18,6 @@ class Maladie:
     		self.Taux_contagion += 0.1
 
     		self.Durée_transmissibilité += 50
-
 
 
 
@@ -50,6 +48,7 @@ def Restate(individu):
 
 		State = np.random.binomial(1,individu.collision.Maladie.Taux_contagion,1)[0]
 
+	 	
 		if State == 1 : 
 
 			individu.etat = "Infécté"
@@ -65,9 +64,7 @@ def Restate(individu):
 
 
 
-
 	if individu.etat == "Saint" and individu.collision.etat == "Rétabli" :#Durée de la période de contagion dans l'attribut collision
-
 
 
 	 	State = np.random.binomial(1,individu.Maladie.Taux_contagion,1)[0]
