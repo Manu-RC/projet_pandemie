@@ -13,6 +13,7 @@ class Sortie :
         self.ui = Ui_Form()
         
 
+
         self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
         self.simulation.generation(rayon,nombre_individus)
 
@@ -37,6 +38,7 @@ class Sortie :
         self.ui.Barre_contamination.setValue(self.simulation.pourcentage_contamines)
 
 
+
     def update_simu(self):  
         """met à jour visuellement les différents états de la simulation """
         self.simulation.advance()
@@ -55,6 +57,7 @@ class Sortie :
                 item.setBrush(QtGui.QBrush(QtGui.QColor("yellow")))
             else:
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
+
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""

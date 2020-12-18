@@ -26,6 +26,7 @@ class Simulation :
 
 
 
+
     def predict_for_all(self):
         """prédit la position de chaque individu et crée des paires de collision si collision il y a"""
         predictions = [self.predict(individu) for individu in self.population]  #contient les prochaines coordonnees des individus ou None s'ils touchent déjà un mur ou un coin
@@ -91,6 +92,7 @@ class Simulation :
         if self.time_increment - var > 0 :
             self.time_increment += var
 
+
     def generation(self,rayon,nb_particule,nombre_contamines):
 
         np.random.seed()
@@ -108,6 +110,7 @@ class Simulation :
         except:
             pass
         for i in range(nb_particule):
+
             if i <= nombre_contamines:
                 x = int(alg.uniform(0,nb_particule-i))
                 y = int(alg.uniform(0,nb_particule-i))
@@ -120,6 +123,7 @@ class Simulation :
                 self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self))
                 x_array.pop(x)
                 y_array.pop(y)
+
 
 
 def collision(cercle1,cercle2):
