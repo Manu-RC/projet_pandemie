@@ -5,7 +5,6 @@ from Maladie import Maladie
 from sortie import Sortie
 import sys
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QApplication
 
 
         

@@ -4,7 +4,6 @@ import numpy as np
 
 
 
-
 class Maladie :
 
 	def __init__(self,hit_time,Taux_contagion,muta_init,Durée_transmissibilité):
@@ -33,32 +32,36 @@ class Maladie :
 
 
 
-def maladie_Basic(population,Taux_contagion,Durée_transmissibilité):
-	S =len(population)
+
+# def maladie_Basic(population,Taux_contagion,Durée_transmissibilité):
+# 	S =len(population)
 	
-	I = 0
+# 	I = 0
 
-	R = 0
+# 	R = 0
 
-	for individu in population :
+# 	for individu in population :
 		
-		if individu.collision != None :
+# 		if individu.collision != None :
 			
-			Restate(individu)
+# 			Restate(individu)
 
 
 
-def Restate(individu):
+# def Restate(individu):
 	 
 	 
 
-	if individu.etat == "Saint" and individu.collision.etat == "Infécté" :
+# 	if individu.etat == "Saint" and individu.collision.etat == "Infécté" :
 	 	
+
 		State = np.random.binomial(1,individu.collision.Maladie.Taux_contagion,1)[0]
-	 	
-		if State == 1 : 
 
-			individu.etat = "Infécté"
+	 	
+# 		if State == 1 : 
+
+# 			individu.etat = "Infécté"
+
 
  			
 
@@ -69,7 +72,9 @@ def Restate(individu):
 			I += 1
 
 
-	if individu.etat == "Saint" and individu.collision.etat == "Rétabli" :#Durée de la période de contagion dans l'attribut collision
+
+# 	if individu.etat == "Saint" and individu.collision.etat == "Rétabli" :#Durée de la période de contagion dans l'attribut collision
+
 
 	 	State = np.random.binomial(1,individu.Maladie.Taux_contagion,1)[0]
 
@@ -100,3 +105,5 @@ def Restate(individu):
 	if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
 
 		individu.Maladie.hit_time = Simulation.time
+
+
