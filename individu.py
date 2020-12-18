@@ -7,7 +7,7 @@ class Individu:
     Un individu est défini par sa position (x,y), sa vitesse de déplacement et sa taille modilisé par un rayon
     """
 
-    def __init__(self, rayon, x, y, vx, vy, simulation, masse=1): #j'ai modifié les entrees car il n'y avait pas vx et vy
+    def __init__(self, rayon, x, y, vx, vy, simulation, maladie=None, masse=1): #j'ai modifié les entrees car il n'y avait pas vx et vy
         self.rayon = rayon
         self.x = x
         self.y = y
@@ -19,6 +19,7 @@ class Individu:
         self.touch = None
         self.masse = masse
         self.etat = 'sain'
+        self.maladie = maladie
         
     def __repr__(self):
         return "position x : {0:02f} \n " \

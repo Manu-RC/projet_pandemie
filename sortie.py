@@ -8,12 +8,13 @@ from individu import Individu
 
 class Sortie : 
 
-    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time):
+    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init):
 
         self.ui = Ui_Form()
         
 
-        self.simulation = Simulation(dimension_x,dimension_y)
+
+        self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
         self.simulation.generation(rayon,nombre_individus)
 
         self.refresh_time = refresh_time
@@ -34,7 +35,8 @@ class Sortie :
         self.ui.Stopbutton.clicked.connect(self.stop)
         
         #connexion de la progress bar au pourcentage de personnes contaminées
-        self.ui.Barre_contamination.setValue(simulation.pourcentage_contaminées)
+        self.ui.Barre_contamination.setValue(self.simulation.pourcentage_contamines)
+
 
 
     def update_simu(self):  
@@ -49,12 +51,13 @@ class Sortie :
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
-            if self.etat == "contaminé":
-                item.setBrush(QBrush(QColor("red")))
-            elif self.etat == "immunisé":
-                item.setBrush(QBrush(QColor("yellow")))
+            if individu.etat == "contaminé":
+                item.setBrush(QtGui.QBrush(QtGui.QColor("red")))
+            elif individu.etat == "immunisé":
+                item.setBrush(QtGui.QBrush(QtGui.QColor("yellow")))
             else:
-                item.setBrush(QBrush(QColor("green")))
+                item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
+
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""

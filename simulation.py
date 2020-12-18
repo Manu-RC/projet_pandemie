@@ -8,8 +8,10 @@ class Simulation :
     """ Cette classe permet la génération des différentes particules, gère les collisions entre les particules
         et les bords du domaines ; ainsi que l'avancement dans le temps de la simulation. """
 
-    def __init__(self,x_max,y_max):
-
+    def __init__(self,x_max,y_max,maladie_init):
+        
+        #maladie initialisée pour un certain nombre d'individus au départ
+        self.maladie_init = maladie_init
         #dimensions de l'environnement
         self.x_max = x_max
         self.y_max = y_max
@@ -20,7 +22,8 @@ class Simulation :
         self.time_increment = 0.1
         self.malades = 5
         self.nombre_individus = len(self.population)
-        self.pourcentage_contaminé= (self.malades/self.nombre_individus)*100
+        self.pourcentage_contamines= (self.malades/self.nombre_individus)*100
+
 
 
 
@@ -89,7 +92,8 @@ class Simulation :
         if self.time_increment - var > 0 :
             self.time_increment += var
 
-    def generation(self,rayon,nb_particule):
+
+    def generation(self,rayon,nb_particule,nombre_contamines):
 
         np.random.seed()
         x_particules = nb_particule // 2
@@ -106,11 +110,20 @@ class Simulation :
         except:
             pass
         for i in range(nb_particule):
-            x = int(alg.uniform(0,nb_particule-i))
-            y = int(alg.uniform(0,nb_particule-i))
-            self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self))
-            x_array.pop(x)
-            y_array.pop(y)
+
+            if i <= nombre_contamines:
+                x = int(alg.uniform(0,nb_particule-i))
+                y = int(alg.uniform(0,nb_particule-i))
+                self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self,self.maladie_init))
+                x_array.pop(x)
+                y_array.pop(y)
+            else:
+                x = int(alg.uniform(0,nb_particule-i))
+                y = int(alg.uniform(0,nb_particule-i))
+                self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-2,2),alg.uniform(-2,2),self))
+                x_array.pop(x)
+                y_array.pop(y)
+
 
 
 def collision(cercle1,cercle2):
