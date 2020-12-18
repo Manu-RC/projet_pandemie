@@ -12,6 +12,7 @@ class Sortie :
 
         self.ui = Ui_Form()
         
+
         self.simulation = Simulation(dimension_x,dimension_y)
         self.simulation.generation(rayon,nombre_individus)
 
@@ -74,3 +75,4 @@ class Sortie :
         if self.univers.timer.isActive():
 
             self.univers.timer.stop()
+

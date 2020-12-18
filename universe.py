@@ -20,7 +20,6 @@ class Universe(QtWidgets.QWidget) :
         self.timer = QtCore.QTimer(self)
         self.refresh_time = refresh_time
         self.set_people()
-
         self.add_shortcut('f', lambda: self.playpause())
         
     def set_people(self):
@@ -32,6 +31,8 @@ class Universe(QtWidgets.QWidget) :
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
+
+
             item.setBrush(QtGui.QBrush(QtGui.QColor("red")))
 
 
@@ -39,3 +40,4 @@ class Universe(QtWidgets.QWidget) :
         """creates an application-wide key binding"""
         shortcut = QtWidgets.QShortcut(QtGui.QKeySequence(text), self)
         shortcut.activated.connect(slot)
+

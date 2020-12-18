@@ -18,10 +18,10 @@ class Simulation :
         self.time = 0
         #pas de temps de la simulation
         self.time_increment = 0.1
-        
         self.malades = 5
         self.nombre_individus = len(self.population)
         self.pourcentage_contaminé= (self.malades/self.nombre_individus)*100
+
 
 
     def predict_for_all(self):
@@ -79,7 +79,9 @@ class Simulation :
         for individu in self.population :
             individu.move(self.x_max,self.y_max)
         self.time += self.time_increment
+
         self.malades +=1
+
 
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
