@@ -26,6 +26,8 @@ class Simulation :
         self.infectes = 0
         self.immunise = 0
         self.pourcentage_contamines= None
+        #historique de la simulation pour les courbes du graphe
+        self.historique = []   # de la forme [temps ,sains,infectes,morts]
 
 
 
@@ -72,19 +74,21 @@ class Simulation :
     def prediction_is_valid(self,individu): 
         """Teste si la prédiction sort ou non l'individu des limites de la simulation (plus courte que predict_for_all)"""
         r = individu.rayon
-
         x,y,r = individu.x + individu.vx * self.time_increment, individu.y + individu.vy * self.time_increment, individu.rayon
-
         return  (0 <= x-r < x+r <= self.x_max) and  (0 <= y-r < y+r <= self.y_max)
 
 
     def advance(self):
-        
+        """Fais avancer la simulation : prédit les collisions , update les états , bouge les individus , update le temps , remplit l'historique"""
         self.predict_for_all()
         self.Restate_for_all()
         for individu in self.population :
             individu.move(self.x_max,self.y_max)
         self.time += self.time_increment
+
+        self.historique += [self.time,self.sains,self.infectes,self.morts]
+
+
 
 
 

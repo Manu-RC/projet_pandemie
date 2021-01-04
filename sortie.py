@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from interface_graphique import Ui_Form
 from universe import Universe 
 from simulation import Simulation
@@ -74,6 +75,20 @@ class Sortie :
                 item.setBrush(QtGui.QBrush(QtGui.QColor("yellow")))
             else:
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
+
+    def plot_history(self): 
+        """affiche les courbes représentant l'historique de la simulation"""
+        time = [etat[0] for etat in self.simulation.historique]
+        sains = [etat[1] for etat in self.simulation.historique]
+        infectes = [etat[2] for etat in self.simulation.historique]
+        morts = [etat[3] for etat in self.simulation.historique]
+        plt.plot(time,sains,color="green",label = "individus sains")
+        plt.plot(time,infectes,color="red",label = "individus infectes")
+        plt.plot(time,morts,color="black",label = "individus morts")
+        plt.title = "Historique de la simulation"
+        plt.xlabel("temps")
+        plt.legend()
+        plt.show()
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""
