@@ -16,7 +16,6 @@ class Sortie :
 
         self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
         self.simulation.generation(rayon,nombre_individus,nombre_contamines_init)
-
         self.refresh_time = refresh_time
         
         #connexion de la scene de l'univers au widget
@@ -24,6 +23,7 @@ class Sortie :
         self.ui.setupUi(self.univers)
         self.ui.graphicsView.setScene(self.univers.scene)
         self.set_simu()
+
 
 
         
@@ -76,7 +76,7 @@ class Sortie :
             else:
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
 
-    def plot_history(self): 
+    def open_history(self): 
         """affiche les courbes représentant l'historique de la simulation"""
         time = [etat[0] for etat in self.simulation.historique]
         sains = [etat[1] for etat in self.simulation.historique]
@@ -89,6 +89,9 @@ class Sortie :
         plt.xlabel("temps")
         plt.legend()
         plt.show()
+
+    def close_history(self):
+        close_history
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""

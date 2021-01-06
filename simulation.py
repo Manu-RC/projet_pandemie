@@ -3,13 +3,14 @@ from individu import Individu
 import physique
 import algebre as alg
 from Maladie import Maladie
+import politique
 
 
 class Simulation :
     """ Cette classe permet la génération des différentes particules, gère les collisions entre les particules
         et les bords du domaines ; ainsi que l'avancement dans le temps de la simulation. """
 
-    def __init__(self,x_max,y_max,maladie_init):
+    def __init__(self,x_max,y_max,maladie_init,politique=None):
         
         #maladie initialisée pour un certain nombre d'individus au départ
         self.maladie_init = maladie_init
@@ -28,7 +29,7 @@ class Simulation :
         self.pourcentage_contamines= None
         #historique de la simulation pour les courbes du graphe
         self.historique = []   # de la forme [temps ,sains,infectes,morts]
-
+        self.politique = politique
 
 
     def predict_for_all(self):
@@ -79,18 +80,17 @@ class Simulation :
 
 
     def advance(self):
-        """Fais avancer la simulation : prédit les collisions , update les états , bouge les individus , update le temps , remplit l'historique"""
+        """avance la simulation:prédit les collisions,update les états,applique la politique en vigueur"""
         self.predict_for_all()
         self.Restate_for_all()
-        for individu in self.population :
-            individu.move(self.x_max,self.y_max)
-        self.time += self.time_increment
-
+        if self.politique=="isolement":
+            politique.isolement(self) #la simulation avance selon les regles de l'isolement cf politique.py
+        elif self.politique=="couvre-feu":
+            politique.couvre_feu(self)
+        else:
+            politique.pas_de_politique(self)
+        
         self.historique += [self.time,self.sains,self.infectes,self.morts]
-
-
-
-
 
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
