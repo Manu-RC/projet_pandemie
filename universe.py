@@ -19,21 +19,9 @@ class Universe(QtWidgets.QWidget) :
         self.scene.addItem(self.items)
         self.timer = QtCore.QTimer(self)
         self.refresh_time = refresh_time
-        self.set_people()
         self.add_shortcut('f', lambda: self.playpause())
         
-    def set_people(self):
-
-        group = QtWidgets.QGraphicsItemGroup()
-        self.scene.addItem(group)
-
-        for individu in self.simu.population:
-
-            bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
-            item = QtWidgets.QGraphicsEllipseItem(bounds, group)
-
-
-            item.setBrush(QtGui.QBrush(QtGui.QColor("red")))
+    
 
 
     def add_shortcut(self,text, slot):

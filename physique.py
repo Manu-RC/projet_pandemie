@@ -13,6 +13,9 @@ def collision_coin(u,v):
     return -u,-v
 
 def collision_particule(I_1,I_2):
+    return -I_1.vx,-I_1.vy,-I_2.vx,-I_2.vy
+
+def collision_particule_2(I_1,I_2):
     """I1 et I2 sont des objets individu"""
     if I_1 == I_2:
         return I_1.vx,I_1.vy,I_2.vx,I_2.vy
