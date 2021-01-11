@@ -51,7 +51,6 @@ class Sortie :
         self.univers.scene.addItem(group)
         simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
-
         for individu in self.simulation.population:
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
@@ -76,7 +75,6 @@ class Sortie :
         self.univers.scene.addItem(group)
         simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
-
         for individu in self.simulation.population:
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
@@ -96,20 +94,34 @@ class Sortie :
 
     def open_history(self): 
         """affiche les courbes représentant l'historique de la simulation"""
-        time = [etat[0] for etat in self.simulation.historique]
-        sains = [etat[1] for etat in self.simulation.historique]
-        infectes = [etat[2] for etat in self.simulation.historique]
-        morts = [etat[3] for etat in self.simulation.historique]
-        plt.plot(time,sains,color="green",label = "individus sains")
-        plt.plot(time,infectes,color="red",label = "individus infectes")
-        plt.plot(time,morts,color="black",label = "individus morts")
+        def plot_current_state():
+            time = []
+            sains = []
+            infectes = []
+            morts = []
+            for etat in self.simulation.historique:
+                time.append(etat[0])
+                sains.append(etat[1])
+                infectes.append(etat[2])
+                morts.append(etat[3])
+            # plt.plot(time,sains,color="green",label = "individus sains")
+            # plt.plot(time,infectes,color="red",label = "individus infectes")
+            # plt.plot(time,morts,color="black",label = "individus morts")
+
         plt.title = "Historique de la simulation"
         plt.xlabel("temps")
         plt.legend()
-        plt.show()
+        while not(self.close_history.has_been_called):
+            plt.clf()
+            plot_current_state()
+            plt.pause(0.1)
+        plt.close()
 
-    # def close_history(self):
-    #     close_history
+    def close_history(self):
+        """permet de signaler à open_history quand est ce que l'utilisateur veut fermer le graphe"""               
+        self.close_history.has_been_called=True
+        pass
+    close_history.has_been_called=False
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""
