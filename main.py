@@ -1,4 +1,4 @@
-from interface_graphique import Ui_Form
+from fenetre_graphique import Ui_Pandemie
 from universe import Universe 
 from simulation import Simulation
 from Maladie import Maladie

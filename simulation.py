@@ -25,7 +25,7 @@ class Simulation :
         self.morts = 0
         self.sains = 0
         self.infectes = 0
-        self.immunise = 0
+        self.immunises = 0
         self.pourcentage_contamines= None
         #historique de la simulation pour les courbes du graphe
         self.historique = []   # de la forme [temps ,sains,infectes,morts]
@@ -90,13 +90,12 @@ class Simulation :
         else:
             politique.pas_de_politique(self)
         
-        self.historique += [self.time,self.sains,self.infectes,self.morts]
+        self.historique += [self.time,self.sains,self.infectes,self.immunises,self.morts]
 
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
-        if self.time_increment - var > 0 :
-            self.time_increment += var
+        self.time_increment *= var
 
     def generation(self,rayon,nb_particule,nombre_contamines):
 
@@ -130,8 +129,8 @@ class Simulation :
                 x_array.pop(x)
                 y_array.pop(y)
         self.infectes = nombre_contamines
-        self.sains = len(self.population)-self.infectes
-        self.pourcentage_contamines = (self.infectes/len(self.population))*100
+        self.sains = len(self.population)-self.infectes-self.immunises
+
         
     def Restate_for_all(self):
         
@@ -142,8 +141,7 @@ class Simulation :
                 if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
                     individu.etat = "Immunise"
                     individu.hit_time = 0
-                    self.immunise +=1
-                    self.sains +=1
+                    self.immunises +=1
                     self.infectes-=1
 
 
@@ -171,7 +169,7 @@ class Simulation :
         elif individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
             individu.etat = "Immunise"
             individu.hit_time = 0
-            self.immunise +=1
+            self.immunises +=1
             self.sains +=1
             self.infectes-=1
 

@@ -15,8 +15,6 @@ class Universe(QtWidgets.QWidget) :
         self.height = simu.y_max
         self.setWindowTitle("test")
         self.scene = QtWidgets.QGraphicsScene()
-        self.items = QtWidgets.QGraphicsItemGroup()
-        self.scene.addItem(self.items)
         self.timer = QtCore.QTimer(self)
         self.refresh_time = refresh_time
         self.add_shortcut('f', lambda: self.playpause())
