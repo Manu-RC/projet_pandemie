@@ -89,8 +89,7 @@ class Simulation :
             politique.couvre_feu(self)
         else:
             politique.pas_de_politique(self)
-        
-        self.historique += [self.time,self.sains,self.infectes,self.immunises,self.morts]
+         self.historique += [self.time,self.sains,self.infectes,self.immunises,self.morts]
 
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
@@ -130,6 +129,7 @@ class Simulation :
                 y_array.pop(y)
         self.infectes = nombre_contamines
         self.sains = len(self.population)-self.infectes-self.immunises
+
 
         
     def Restate_for_all(self):

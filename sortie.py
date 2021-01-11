@@ -51,6 +51,7 @@ class Sortie :
         self.univers.scene.addItem(group)
         simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
+
         for individu in self.simulation.population:
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
@@ -75,6 +76,7 @@ class Sortie :
         self.univers.scene.addItem(group)
         simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
+
         for individu in self.simulation.population:
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
