@@ -90,7 +90,7 @@ class Simulation :
         else:
             politique.pas_de_politique(self)
         
-        self.historique += [self.time,self.sains,self.infectes,self.morts]
+        self.historique += [self.time,self.sains,self.infectes,self.immunise,self.morts]
 
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
@@ -131,7 +131,7 @@ class Simulation :
                 y_array.pop(y)
         self.infectes = nombre_contamines
         self.sains = len(self.population)-self.infectes
-        self.pourcentage_contamines = (self.infectes/len(self.population))*100
+
         
     def Restate_for_all(self):
         

@@ -5,6 +5,7 @@ from simulation import Simulation
 from Maladie import Maladie
 from PyQt5 import QtCore, QtGui, QtWidgets
 from individu import Individu
+import politique
 
 
 class Sortie : 
@@ -34,15 +35,19 @@ class Sortie :
         #connexion des boutons start et stop
         self.ui.StartButton.clicked.connect(self.start)
         self.ui.Stopbutton.clicked.connect(self.stop)
-        
-        #connexion de la progress bar au pourcentage de personnes contaminées
-        self.ui.Barre_contamination.setValue(self.simulation.pourcentage_contamines)
+
+        #connexion des boutons d'accélération de la simulation
+        self.ui.x2.cliked.connect(self.x2)
+        self.ui.x4.clicked.connect(self.x4)
+
+        #connexion des check Boxs
+        self.ui.Confinement_checkBox.clicked.connect(self.update_politique)
+        self.ui.Couvrefeu_checkBox.clicked.connect(self.update_politique)
 
     def set_simu(self):
 
         group = QtWidgets.QGraphicsItemGroup()
         self.univers.scene.addItem(group)
-
         for individu in self.simulation.population:
 
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
@@ -58,12 +63,23 @@ class Sortie :
         """met à jour visuellement les différents états de la simulation """
         self.simulation.advance()
         self.univers.scene.clear()
-        self.ui.Compteur_malades.display(self.simulation.infectes)
-        self.ui.Compteur_morts.display(self.simulation.morts)
-        self.ui.Compteur_pop_saine.display(self.simulation.sains)
-        self.ui.Compteur_pop_totale.display(len(self.simulation.population))
+        self.ui.Compteur_infectes.display(self.simulation.infectes)
+        self.ui.Compteur_Morts.display(self.simulation.morts)
+        self.ui.Compteur_sains.display(self.simulation.sains)
+        self.ui.Compteur_population_totale.display(len(self.simulation.population))
+        self.ui.Compteur_immunises.display(self.simulation.immunise)
         group = QtWidgets.QGraphicsItemGroup()
         self.univers.scene.addItem(group)
+
+    def update_politique(self):
+        if self.ui.Confinement_checkBox.isChecked():
+            self.simulation.politique == "Confinement"   # à préciser, est ce que confinement empeche couvre feu ?
+        elif self.ui.Couvrefeu_checkBox.isChecked():
+            self.simulation.politique == "Couvre-feu"    # same
+        else:
+            return
+
+
 
         for individu in self.simulation.population:
 
@@ -112,4 +128,23 @@ class Sortie :
         if self.univers.timer.isActive():
 
             self.univers.timer.stop()
+
+    def x2(self):
+
+        if self.ui.x2.isClicked():
+
+            change_speed(self,2)
+
+    def x4(self):
+
+        if self.ui.x4.isClicked():
+
+            change_speed(self, 4)
+
+
+
+
+
+
+
 
