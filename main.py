@@ -1,16 +1,24 @@
-from interface_graphique import Ui_Form
+from fenetre_graphique import Ui_Pandemie
 from universe import Universe 
 from simulation import Simulation
 from Maladie import Maladie
 from sortie import Sortie
 import sys
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QApplication
 
 
         
         
 def main():
+
+    #maladie initiale
+    hit_time = 0
+    Taux_contagion = 1
+    muta_init = 0.01
+    Duree_transmissibilite = 200
+    maladie_init = Maladie(hit_time,Taux_contagion,muta_init,Duree_transmissibilite)
+
+    nombre_contamines_init = 30
 
     longueur = 500
     hauteur = 500
@@ -20,7 +28,7 @@ def main():
 
     app = QtWidgets.QApplication(sys.argv)
     
-    out = Sortie(longueur,hauteur,nombre_individus,rayon,refresh_time)
+    out = Sortie(longueur,hauteur,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init)
 
     out.univers.show()
     sys.exit(app.exec_())

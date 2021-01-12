@@ -1,76 +1,19 @@
+import numpy as np
 
-class Maladie : # à compléter
+class Maladie:
 
-	def __init__(self,taux_contagion,muta_init):
+	def __init__(self,hit_time,Taux_contagion,Taux_mutation,Duree_transmissibilite):
 
-		self.taux_contagion = taux_contagion
-		self.mutabilite = muta_init
-
-
-
-
-# def maladie_Basic(population,Taux_contagion,Durée_transmissibilité):
-# 	S =len(population)
-	
-# 	I = 0
-
-# 	R = 0
-
-# 	for individu in population :
-		
-# 		if individu.collision != None :
-			
-# 			Restate(individu)
+		self.hit_time = hit_time
+		self.Taux_contagion = Taux_contagion
+		self.Taux_mutation = Taux_mutation
+		self.Duree_transmissibilite = Duree_transmissibilite
 
 
 
-# def Restate(individu):
-	 
-	 
-
-# 	if individu.etat == "Saint" and individu.collision.etat == "Infécté" :
-	 	
-# 		State = np.random.binomial(1,Taux_contagion,1)[0]
-	 	
-# 		if State == 1 : 
-
-# 			individu.etat = "Infécté"
-
-# 			individu.hit_time = Simulation.time
-	 	
-# 	 		S -= 1
-
-# 	 		I += 1
 
 
-# 	if individu.etat == "Saint" and individu.collision.etat == "Rétabli" :#Durée de la période de contagion dans l'attribut collision
-
-# 	 	State = np.random.binomial(1,Taux_contagion,1)[0]
-
-# 	 	hit_timeframe = Simulation.time - individu.collision.hit_time
-
-# 	 	if State == 1 and hit_timeframe <= Durée_transmissibilité and hit_timeframe != Simulation.time :
 
 
-# 	 		individu.etat = "Infécté"
-
-# 	 		individu.hit_time = Simulation.time
-
-# 	 		S-=1
-
-# 	 		I +=1
 
 
-# 	if individu.etat == "Infécté" and hit_timeframe > Durée_transmissibilité :
-
-# 			individu.etat = "Rétabli"
-
-# 			individu.hit_time = 0
-
-# 			R +=1
-
-# 			I-=1
-
-# 	if (individu.etat == "Rétabli" and individu.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < Durée_transmissibilité and hit_timeframe != Simulation.time)) :
-
-# 		individu.hit_time = Simulation.time
