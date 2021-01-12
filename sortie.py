@@ -92,8 +92,15 @@ class Sortie :
         elif self.ui.Couvrefeu_checkBox.isChecked():
             self.simulation.politique == "couvre-feu"    # same
 
+    def open_close_history(self):
+        if not(self.open_history.has_been_called):
+            self.open_history()
+        else:
+            self.close_history()
+
     def open_history(self): 
         """affiche les courbes représentant l'historique de la simulation"""
+        self.open_history.has_been_called=True
         def plot_current_state():
             time = []
             sains = []
@@ -116,6 +123,8 @@ class Sortie :
             plot_current_state()
             plt.pause(0.1)
         plt.close()
+        self.close_history.has_been_called=False
+    open_history.has_been_called=False
 
     def close_history(self):
         """permet de signaler à open_history quand est ce que l'utilisateur veut fermer le graphe"""               
