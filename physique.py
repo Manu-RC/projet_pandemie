@@ -13,6 +13,7 @@ def collision_coin(u,v):
     return -u,-v
 
 def collision_particule(I_1,I_2):
+
     """I_1 et I_2 sont des objets Individu"""
     x1 = np.array((I_1.x,I_1.y))
     x2 = np.array((I_2.x,I_2.y))

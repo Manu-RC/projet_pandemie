@@ -22,7 +22,7 @@ def main():
 
     longueur = 500
     hauteur = 500
-    nombre_individus = 50
+    nombre_individus = 100
     rayon = 5
     refresh_time = 10 #millisecondes
 

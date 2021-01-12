@@ -71,7 +71,6 @@ class Simulation :
         else :
             return (x,y,r)
 
-
     def prediction_is_valid(self,individu):
         """Teste si la prédiction sort ou non l'individu des limites de la simulation (plus courte que predict_for_all)"""
         r = individu.rayon
@@ -91,14 +90,13 @@ class Simulation :
             politique.pas_de_politique(self)
         self.historique += [self.time,self.sains,self.infectes,self.immunises,self.morts]
 
-
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
         self.time_increment *= var
 
     def generation(self,rayon,nb_particule,nombre_contamines):
 
-        np.random.seed(1)
+        np.random.seed()
         x_particules = nb_particule // 2
         y_particules = nb_particule - x_particules
         pas_x = int(self.x_max / (2 * x_particules))
@@ -110,7 +108,6 @@ class Simulation :
             x_array[k] = alg.uniform(k * pas_x + rayon, (k+1)*pas_x - rayon)
             y_array[k] = alg.uniform(k * pas_y + rayon, (k+1)*pas_y - rayon)
             k += 1
-
         for i in range(nb_particule):
             if i < nombre_contamines:
                 x = int(alg.uniform(0,nb_particule-i))
@@ -142,7 +139,6 @@ class Simulation :
                     individu.hit_time = 0
                     self.immunises +=1
                     self.infectes-=1
-
 
     def Restate(self,individu):
         
