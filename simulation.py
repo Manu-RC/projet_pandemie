@@ -166,8 +166,14 @@ class Simulation :
             self.immunises +=1
             self.sains +=1
             self.infectes-=1
+        if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #compléxation du covid apparaissent 6 jours aprés l'infection
+            State= np.random.binomial(1,individu.maladie.lethalite)#lethalité entre 0.1% et 1% 
+            if State ==1 :
+                self.morts +=1
+                self.infectes -=1
+                self.population.pop(individu)
 
-	    # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
+        # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
         #     individu.Maladie.hit_time = Simulation.time
 
 def collision(cercle1,cercle2):
