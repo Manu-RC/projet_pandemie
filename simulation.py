@@ -43,8 +43,6 @@ class Simulation :
                         #on donne a chaque individu l'individu avec qui il va entrer en collision
                         individu_i = self.population[i]
                         individu_j = self.population[j]
-                        #print("Individu numero ", i, " :  \n", individu_i)
-                        #i_vx, i_vy, j_vx, j_vy = physique.collision_particule(individu_i,individu_j)
                         individu_i.touch = individu_j
                         individu_j.touch = individu_i
 
@@ -81,7 +79,7 @@ class Simulation :
     def advance(self):
         """avance la simulation:prédit les collisions,update les états,applique la politique en vigueur"""
         self.predict_for_all()
-        self.Restate_for_all()
+        self.restate_for_all()
         if self.politique=="isolement":
             politique.isolement(self) #la simulation avance selon les regles de l'isolement cf politique.py
         elif self.politique=="couvre-feu":
@@ -127,14 +125,12 @@ class Simulation :
                 y_array.pop(y)
         self.infectes = nombre_contamines
         self.sains = len(self.population)-self.infectes-self.immunises
-
-
         
-    def Restate_for_all(self):
+    def restate_for_all(self):
         
         for individu in self.population:
             if type(individu.touch) != str and individu.touch is not None :
-                self.Restate(individu)
+                self.restate(individu)
             elif individu.touch is None :
                 if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
                     individu.etat = "Immunise"
@@ -142,7 +138,7 @@ class Simulation :
                     self.immunises +=1
                     self.infectes-=1
 
-    def Restate(self,individu):
+    def restate(self,individu):
         
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
             State = np.random.binomial(1,individu.touch.maladie.Taux_contagion)
@@ -186,7 +182,4 @@ def collision(cercle1,cercle2):
     if alg.distance(cercle1,cercle2) < (rayon_1 + rayon_2) :
         return True
     else:
-        return False
-
-
-    
+        return False    
