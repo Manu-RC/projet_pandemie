@@ -19,13 +19,6 @@ class Maladie:
 
 
 
-#kill dans simulation
-if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #complixation du covid apparaissent 6 jours aprés l'infection
-	State= np.random.binomial(1,individu.maladie.lethalite)#lethalité entre 0.1% et 1% 
-	if State ==1 :
-		self.morts +=1
-		self.infectes -=1
-		self.population.pop(individu)
 
 
 
