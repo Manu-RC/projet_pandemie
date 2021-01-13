@@ -18,7 +18,7 @@ class Universe(QtWidgets.QWidget) :
         self.timer = QtCore.QTimer(self)
         self.refresh_time = refresh_time
         self.add_shortcut('f', lambda: self.playpause())
-        
+
     
 
 

@@ -21,7 +21,7 @@ class Simulation :
         #horloge de la simulation 
         self.time = 0
         #pas de temps de la simulation
-        self.time_increment = 0.1
+        self.time_increment = 0.05
         self.morts = 0
         self.sains = 0
         self.infectes = 0
@@ -52,27 +52,26 @@ class Simulation :
         """renvoie les prochaines coordonnees ou donne a l'individu l'obstacle qu'il rencontre (peut etre amelioree)"""
         pred = individu.next_position()
         x,y,r = pred[0],pred[1],individu.rayon
-        if x-r < 0 and 0 <= y-r <= y+r <= self.y_max :
+        if x-r < 0 and 0 <= y-r <= y+r <= self.y_max:
             individu.touch =  "left_wall"
-        elif x+r > self.x_max and 0 <= y-r <= y+r <= self.y_max :
+        elif x+r > self.x_max and 0 <= y-r <= y+r <= self.y_max:
             individu.touch = "right_wall"
-        elif 0 <= x-r <= x+r <= self.x_max and y-r < 0  :
+        elif 0 <= x-r <= x+r <= self.x_max and y-r < 0:
             individu.touch = "up_wall"
-        elif 0 <= x-r <= x+r <= self.x_max and y+r > self.y_max :
+        elif 0 <= x-r <= x+r <= self.x_max and y+r > self.y_max:
             individu.touch = "down_wall"
-        elif x-r < 0 and y-r < 0 :
+        elif x-r < 0 and y-r < 0:
             individu.touch = "up-left_corner"
-        elif x+r > self.x_max and y-r < 0 :
+        elif x+r > self.x_max and y-r < 0:
             individu.touch = "up-right_corner"
-        elif x-r < 0 and y+r > self.y_max :
+        elif x-r < 0 and y+r > self.y_max:
             individu.touch = "down-right_corner"
-        elif x+r > self.x_max and y+r > self.y_max :
+        elif x+r > self.x_max and y+r > self.y_max:
             individu.touch = "down-left_corner"
         else :
             return (x,y,r)
 
-
-    def prediction_is_valid(self,individu): 
+    def prediction_is_valid(self,individu):
         """Teste si la prédiction sort ou non l'individu des limites de la simulation (plus courte que predict_for_all)"""
         r = individu.rayon
         x,y,r = individu.x + individu.vx * self.time_increment, individu.y + individu.vy * self.time_increment, individu.rayon
@@ -89,12 +88,13 @@ class Simulation :
             politique.couvre_feu(self)
         else:
             politique.pas_de_politique(self)
-         self.historique += [self.time,self.sains,self.infectes,self.immunises,self.morts]
-
+        self.historique.append([self.time,self.sains,self.infectes,self.immunises,self.morts])
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
-        self.time_increment *= var
+        wanted_speed = self.time_increment*var
+        if 0.1 <= wanted_speed < 3:
+            self.time_increment *= var
 
     def generation(self,rayon,nb_particule,nombre_contamines):
 
@@ -105,13 +105,11 @@ class Simulation :
         pas_y = int(self.y_max / (2 * y_particules))
         x_array = [0] * nb_particule
         y_array = [0] * nb_particule
-        try:
-            for k,i in enumerate(range(0,self.x_max,pas_x)):
-                x_array[k] = alg.uniform(i+rayon,i + pas_x - rayon -1)
-            for k,j in enumerate(range(0,self.y_max, pas_y)):
-                y_array[k] = alg.uniform(j+rayon,j+pas_y -rayon -1)
-        except:
-            pass
+        k = 0
+        while k < nb_particule:
+            x_array[k] = alg.uniform(k * pas_x + rayon, (k+1)*pas_x - rayon)
+            y_array[k] = alg.uniform(k * pas_y + rayon, (k+1)*pas_y - rayon)
+            k += 1
         for i in range(nb_particule):
             if i < nombre_contamines:
                 x = int(alg.uniform(0,nb_particule-i))
@@ -144,15 +142,14 @@ class Simulation :
                     self.immunises +=1
                     self.infectes-=1
 
-
-
     def Restate(self,individu):
         
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
             State = np.random.binomial(1,individu.touch.maladie.Taux_contagion)
             if State == 1 :
                 maladie = individu.touch.maladie
-                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite)
+                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite,maladie.lethalite)
+                individu.maladie.mutate()
                 individu.etat = "Infecte"
                 self.sains -= 1
                 self.infectes += 1
@@ -172,8 +169,14 @@ class Simulation :
             self.immunises +=1
             self.sains +=1
             self.infectes-=1
+        if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #compléxation du covid apparaissent 6 jours aprés l'infection
+            State= np.random.binomial(1,individu.maladie.lethalite)#lethalité entre 0.1% et 1% 
+            if State ==1 :
+                self.morts +=1
+                self.infectes -=1
+                self.population.pop(individu)
 
-	    # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
+        # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
         #     individu.Maladie.hit_time = Simulation.time
 
 def collision(cercle1,cercle2):
