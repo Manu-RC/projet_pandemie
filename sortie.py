@@ -37,9 +37,19 @@ class Sortie :
         self.ui.StartButton.clicked.connect(self.start)
         self.ui.StopButton.clicked.connect(self.stop)
 
-        #connexion des boutons d'accélération de la simulation
+        #connexion des boutons d'accélération et de décélération de la simulation
         self.ui.x2.clicked.connect(self.x2)
         self.ui.x4.clicked.connect(self.x4)
+
+        self.ui.reduce_speed_x4.clicked.connect(self.reduce_speed_x4)
+        self.ui.reduce_speed_x2.clicked.connect(self.reduce_speed_x2)
+
+        #connexion de la Combo Box
+        self.ui.choice_politique.connect(self.choice_politique)
+
+        #connexion du bouton Graph
+        self.ui.Graph_button.clicked.connect(self.open_close_history)
+
 
         #connexion des check Boxs
         self.ui.Confinement_checkBox.clicked.connect(self.update_politique)
@@ -86,11 +96,6 @@ class Sortie :
             else:
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
     
-    def update_politique(self):
-        if self.ui.Confinement_checkBox.isChecked():
-            self.simulation.politique == "confinement"   # à préciser, est ce que confinement empeche couvre feu ?
-        elif self.ui.Couvrefeu_checkBox.isChecked():
-            self.simulation.politique == "couvre-feu"    # same
 
     def open_close_history(self):
         if not(self.open_history.has_been_called):
@@ -157,6 +162,20 @@ class Sortie :
 
     def x4(self):
         self.simulation.change_speed(4)
+
+    def reduce_speed_x4(self):
+        self.simulation.change_speed(-4)
+
+    def reduce_speed_x2(self):
+        self.simulation.change_speed(-2)
+
+    def choice_politique(self):
+        if self.ui.choice_politique.currentText() == "Confinement":
+            self.simulation.politique = "confinement"
+        if self.ui.choice_politique.currentText() == "Couvre-feu":
+            self.simulation.politique = "couvre-feu"
+        else:
+            self.simulation.politique = None
 
 
 
