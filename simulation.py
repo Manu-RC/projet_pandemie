@@ -21,7 +21,7 @@ class Simulation :
         #horloge de la simulation 
         self.time = 0
         #pas de temps de la simulation
-        self.time_increment = 0.1
+        self.time_increment = 0.05
         self.morts = 0
         self.sains = 0
         self.infectes = 0
@@ -88,11 +88,13 @@ class Simulation :
             politique.couvre_feu(self)
         else:
             politique.pas_de_politique(self)
-        self.historique += [self.time,self.sains,self.infectes,self.immunises,self.morts]
+        self.historique.append([self.time,self.sains,self.infectes,self.immunises,self.morts])
 
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
-        self.time_increment *= var
+        wanted_speed = self.time_increment*var
+        if 0.1 <= wanted_speed < 3:
+            self.time_increment *= var
 
     def generation(self,rayon,nb_particule,nombre_contamines):
 
@@ -146,7 +148,8 @@ class Simulation :
             State = np.random.binomial(1,individu.touch.maladie.Taux_contagion)
             if State == 1 :
                 maladie = individu.touch.maladie
-                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite)
+                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite,maladie.lethalite)
+                individu.maladie.mutate()
                 individu.etat = "Infecte"
                 self.sains -= 1
                 self.infectes += 1

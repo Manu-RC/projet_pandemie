@@ -14,8 +14,8 @@ class Sortie :
 
         self.ui = Ui_Pandemie()
         
-        self.universe_width = dimension_x
-        self.universe_height = dimension_y
+        self.universe_width = dimension_y
+        self.universe_height = dimension_x
         self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
         self.simulation.generation(rayon,nombre_individus,nombre_contamines_init)
         self.refresh_time = refresh_time
@@ -24,6 +24,7 @@ class Sortie :
         self.univers = Universe(self.simulation,refresh_time)
         self.ui.setupUi(self.univers)
         self.ui.graphicsView.setScene(self.univers.scene)
+        self.fit_scene_in_view()
         self.set_simu()
 
 
@@ -45,15 +46,13 @@ class Sortie :
         self.ui.reduce_speed_x2.clicked.connect(self.reduce_speed_x2)
 
         #connexion de la Combo Box
-        self.ui.choice_politique.connect(self.choice_politique)
+        self.ui.choice_politique.currentTextChanged.connect(self.choice_politique)
 
         #connexion du bouton Graph
         self.ui.Graph_button.clicked.connect(self.open_close_history)
 
-
-        #connexion des check Boxs
-        self.ui.Confinement_checkBox.clicked.connect(self.update_politique)
-        self.ui.Couvrefeu_checkBox.clicked.connect(self.update_politique)
+    def fit_scene_in_view(self):
+        self.ui.graphicsView.fitInView(self.ui.graphicsView.sceneRect(), QtCore.Qt.KeepAspectRatio)
 
     def set_simu(self):
 
@@ -98,44 +97,13 @@ class Sortie :
     
 
     def open_close_history(self):
-        if not(self.open_history.has_been_called):
-            self.open_history()
+        if not(open_history.has_been_called):
+            open_history(self.simulation)
         else:
-            self.close_history()
-
-    def open_history(self): 
-        """affiche les courbes représentant l'historique de la simulation"""
-        self.open_history.has_been_called=True
-        def plot_current_state():
-            time = []
-            sains = []
-            infectes = []
-            morts = []
-            for etat in self.simulation.historique:
-                time.append(etat[0])
-                sains.append(etat[1])
-                infectes.append(etat[2])
-                morts.append(etat[3])
-            # plt.plot(time,sains,color="green",label = "individus sains")
-            # plt.plot(time,infectes,color="red",label = "individus infectes")
-            # plt.plot(time,morts,color="black",label = "individus morts")
-
-        plt.title = "Historique de la simulation"
-        plt.xlabel("temps")
-        plt.legend()
-        while not(self.close_history.has_been_called):
-            plt.clf()
-            plot_current_state()
-            plt.pause(0.1)
-        plt.close()
-        self.close_history.has_been_called=False
-    open_history.has_been_called=False
-
-    def close_history(self):
-        """permet de signaler à open_history quand est ce que l'utilisateur veut fermer le graphe"""               
-        self.close_history.has_been_called=True
-        pass
-    close_history.has_been_called=False
+            close_history()
+        # open_history(self.simulation)
+    
+    
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""
@@ -164,10 +132,10 @@ class Sortie :
         self.simulation.change_speed(4)
 
     def reduce_speed_x4(self):
-        self.simulation.change_speed(-4)
+        self.simulation.change_speed(0.25)
 
     def reduce_speed_x2(self):
-        self.simulation.change_speed(-2)
+        self.simulation.change_speed(0.5)
 
     def choice_politique(self):
         if self.ui.choice_politique.currentText() == "Confinement":
@@ -178,8 +146,42 @@ class Sortie :
             self.simulation.politique = None
 
 
+"----------------------------------------------------------- POUR LE GRAPHE"
 
+def open_history(simulation): 
+        """affiche les courbes représentant l'historique de la simulation"""
+        open_history.has_been_called=True
+        def plot_current_state():
+            time = []
+            sains = []
+            infectes = []
+            morts = []
+            for etat in simulation.historique:
+                time.append(etat[0])
+                sains.append(etat[1])
+                infectes.append(etat[2])
+                morts.append(etat[3])
+            plt.plot(time,sains,color="green")
+            plt.plot(time,infectes,color="red")
+            plt.plot(time,morts,color="black")
 
+        plt.title = "Historique de la simulation"
+        plt.xlabel("temps")
+        plot_current_state()
+        while not(close_history.has_been_called):
+            plt.clf()
+            plot_current_state()
+            plt.pause(0.2)
+        plt.close()
+        close_history.has_been_called=False
+open_history.has_been_called=False  
+
+def close_history():
+    """permet de signaler à open_history quand est ce que l'utilisateur veut fermer le graphe"""               
+    close_history.has_been_called=True
+    open_history.has_been_called=False
+    pass
+close_history.has_been_called=False
 
 
 

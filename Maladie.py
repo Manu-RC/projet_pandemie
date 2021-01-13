@@ -11,10 +11,10 @@ class Maladie:
 		self.lethalite = lethalite
 	
 	def mutate(self):
-		State=np.random.binomial(1,Taux_mutation)
+		State=np.random.binomial(1,self.Taux_mutation)
 		if State == 1:
-			self.Duree_transmissibilite += 0.1*Duree_transmissibilite
-			self.Taux_mutation -= 0.5*Taux_mutation
+			self.Duree_transmissibilite += 0.1*self.Duree_transmissibilite
+			self.Taux_mutation -= 0.5*self.Taux_mutation
 
 
 

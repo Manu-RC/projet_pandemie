@@ -13,18 +13,19 @@ def main():
 
     #maladie initiale
     hit_time = 0
-    Taux_contagion = 1
+    Taux_contagion = 0.5
     muta_init = 0.01
     Duree_transmissibilite = 200
-    maladie_init = Maladie(hit_time,Taux_contagion,muta_init,Duree_transmissibilite)
+    lethalite = 1
+    maladie_init = Maladie(hit_time,Taux_contagion,muta_init,Duree_transmissibilite,lethalite)
 
     nombre_contamines_init = 30
 
-    longueur = 500
+    longueur = 800
     hauteur = 500
     nombre_individus = 100
-    rayon = 5
-    refresh_time = 10 #millisecondes
+    rayon = 4
+    refresh_time = 20 #millisecondes
 
     app = QtWidgets.QApplication(sys.argv)
     
