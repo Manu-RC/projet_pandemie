@@ -139,13 +139,15 @@ class Simulation :
                     individu.hit_time = 0
                     self.immunises +=1
                     self.infectes-=1
+
                 if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #compléxation du covid apparaissent 6 jours aprés l'infection
                     State= np.random.binomial(1,gaussienne(individu.maladie.lethalite))#lethalité entre 0.1% et 1% 
                     if State ==1 :
                         self.morts +=1
                         self.infectes -=1
                         self.population.pop(individu)
-    
+
+
     def restate(self,individu):
         
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
