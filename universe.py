@@ -1,7 +1,4 @@
-import math
-import sys
-import simulation
-import random as rd
+
 from PyQt5 import QtWidgets, QtGui, QtCore
 
 

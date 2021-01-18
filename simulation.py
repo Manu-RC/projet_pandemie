@@ -144,13 +144,12 @@ class Simulation :
                     if State ==1 :
                         self.morts +=1
                         self.infectes -=1
-                        self.population.pop(individu)
-
+                        index = self.population.index(individu)
+                        self.population.pop(index)
     
     def restate(self,individu):
         
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
-
             State = np.random.binomial(1,gaussienne(individu.touch.maladie.Taux_contagion))
             if State == 1 :
                 maladie = individu.touch.maladie
@@ -167,7 +166,6 @@ class Simulation :
             self.sains +=1
             self.infectes-=1
         
-
 
 def collision(cercle1,cercle2):
 
