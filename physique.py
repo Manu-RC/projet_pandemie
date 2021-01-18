@@ -34,11 +34,5 @@ def loi_isolement(I_1):
     else:
         return I_1.vx,I_1.vy
 
-if "__main__" == __name__:
-    
-    pass
-    #print(collision_particule(4,0,-6,0,3,5)) # Cas 1D wikipédia
-    #print(collision_particule(1,0,0,0,1,1)) # Cas 1D avec masse identique et un individu à l'arret
-    #print(collision_particule(1,0,-1,0,2,1))
-    #print(collision_particule(1,0,0.5,0,1,1))
+
 

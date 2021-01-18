@@ -21,7 +21,7 @@ class Simulation :
         #horloge de la simulation 
         self.time = 0
         #pas de temps de la simulation
-        self.time_increment = 0.05
+        self.time_increment = 0.2
         self.morts = 0
         self.sains = 0
         self.infectes = 0
@@ -145,13 +145,12 @@ class Simulation :
                         self.morts +=1
                         self.infectes -=1
                         self.population.pop(individu)
+
     
     def restate(self,individu):
         
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
-            
-            
-            
+
             State = np.random.binomial(1,gaussienne(individu.touch.maladie.Taux_contagion))
             if State == 1 :
                 maladie = individu.touch.maladie
@@ -161,15 +160,6 @@ class Simulation :
                 self.sains -= 1
                 self.infectes += 1
 
-	    # if individu.etat == "Sain" and individu.collision.etat == "Rétabli" :#Durée de la période de contagion dans l'attribut collision
-		#     State = np.random.binomial(1,individu.Maladie.Taux_contagion)
-		#     hit_timeframe = individu.simulation.time - individu.collision.Maladie.hit_time
-		
-		#     if State == 1 and hit_timeframe <= individu.Maladie.Durée_transmissibilité and hit_timeframe != individu.simulation.time :
-        #         individu.etat = "Infécté"
-        #         individu.hit_time = Simulation.time
-        #         self.sains-=1
-        #         self.infectes +=1
         elif individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
             individu.etat = "Immunise"
             individu.hit_time = 0
@@ -177,8 +167,7 @@ class Simulation :
             self.sains +=1
             self.infectes-=1
         
-        # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
-        #     individu.Maladie.hit_time = Simulation.time
+
 
 def collision(cercle1,cercle2):
 

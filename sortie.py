@@ -155,14 +155,17 @@ def open_history(simulation):
             time = []
             sains = []
             infectes = []
+            immunises = []
             morts = []
             for etat in simulation.historique:
                 time.append(etat[0])
                 sains.append(etat[1])
                 infectes.append(etat[2])
-                morts.append(etat[3])
+                immunises.append(etat[3])
+                morts.append(etat[4])
             plt.plot(time,sains,color="green")
             plt.plot(time,infectes,color="red")
+            plt.plot(time,immunises,color="yellow")
             plt.plot(time,morts,color="black")
 
         plt.title = "Historique de la simulation"
