@@ -29,10 +29,9 @@ def init_vitesse():
 
 def loi_isolement(I_1):
     choix = alg.uniform(0,1)
-    if choix < 0.05:
+    if choix < 0.95:
         return 0,0 
     else:
         return I_1.vx,I_1.vy
-
 
 

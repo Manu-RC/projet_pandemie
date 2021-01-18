@@ -1,10 +1,7 @@
-from fenetre_graphique import Ui_Pandemie
-from universe import Universe 
-from simulation import Simulation
 from Maladie import Maladie
 from sortie import Sortie
 import sys
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 
 
 def main(longueur,largeur,nombre_individus,nombre_contamines_init):
@@ -17,12 +14,6 @@ def main(longueur,largeur,nombre_individus,nombre_contamines_init):
     lethalite = 1
     maladie_init = Maladie(hit_time,Taux_contagion,muta_init,Duree_transmissibilite,lethalite)
 
-
-    #Population et domaine
-    #nombre_contamines_init = 30
-    #longueur = 800
-    #hauteur = 500
-    #nombre_individus = 100
     rayon = 4
     refresh_time = 20 #millisecondes
 
@@ -35,7 +26,6 @@ def main(longueur,largeur,nombre_individus,nombre_contamines_init):
 
 
 
-if __name__ == "__main__":
-    main()
+
 
 

@@ -2,10 +2,9 @@ import matplotlib.pyplot as plt
 from fenetre_graphique import Ui_Pandemie
 from universe import Universe 
 from simulation import Simulation
-from Maladie import Maladie
 from PyQt5 import QtCore, QtGui, QtWidgets
 from individu import Individu
-import politique
+
 
 
 class Sortie : 
@@ -14,6 +13,7 @@ class Sortie :
 
         self.ui = Ui_Pandemie()
         
+        #setup des différents paramètres de la simulation 
         self.universe_width = dimension_y
         self.universe_height = dimension_x
         self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
@@ -41,7 +41,6 @@ class Sortie :
         #connexion des boutons d'accélération et de décélération de la simulation
         self.ui.x2.clicked.connect(self.x2)
         self.ui.x4.clicked.connect(self.x4)
-
         self.ui.reduce_speed_x4.clicked.connect(self.reduce_speed_x4)
         self.ui.reduce_speed_x2.clicked.connect(self.reduce_speed_x2)
 
@@ -101,7 +100,7 @@ class Sortie :
             open_history(self.simulation)
         else:
             close_history()
-        # open_history(self.simulation)
+
     
     
 
