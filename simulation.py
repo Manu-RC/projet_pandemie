@@ -2,7 +2,7 @@ import numpy as np
 from individu import Individu
 import physique
 import algebre as alg
-from Maladie import Maladie
+from Maladie import Maladie,gaussienne
 import politique
 
 
@@ -21,7 +21,7 @@ class Simulation :
         #horloge de la simulation 
         self.time = 0
         #pas de temps de la simulation
-        self.time_increment = 0.1
+        self.time_increment = 0.05
         self.morts = 0
         self.sains = 0
         self.infectes = 0
@@ -43,8 +43,6 @@ class Simulation :
                         #on donne a chaque individu l'individu avec qui il va entrer en collision
                         individu_i = self.population[i]
                         individu_j = self.population[j]
-                        #print("Individu numero ", i, " :  \n", individu_i)
-                        #i_vx, i_vy, j_vx, j_vy = physique.collision_particule(individu_i,individu_j)
                         individu_i.touch = individu_j
                         individu_j.touch = individu_i
 
@@ -81,18 +79,22 @@ class Simulation :
     def advance(self):
         """avance la simulation:prédit les collisions,update les états,applique la politique en vigueur"""
         self.predict_for_all()
-        self.Restate_for_all()
+        self.restate_for_all()
         if self.politique=="isolement":
             politique.isolement(self) #la simulation avance selon les regles de l'isolement cf politique.py
         elif self.politique=="couvre-feu":
             politique.couvre_feu(self)
         else:
             politique.pas_de_politique(self)
-        self.historique += [self.time,self.sains,self.infectes,self.immunises,self.morts]
+        self.historique.append([self.time,self.sains,self.infectes,self.immunises,self.morts])
 
+
+        
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
-        self.time_increment *= var
+        wanted_speed = self.time_increment*var
+        if 0.1 <= wanted_speed < 3:
+            self.time_increment *= var
 
     def generation(self,rayon,nb_particule,nombre_contamines):
 
@@ -125,28 +127,36 @@ class Simulation :
                 y_array.pop(y)
         self.infectes = nombre_contamines
         self.sains = len(self.population)-self.infectes-self.immunises
-
-
         
-    def Restate_for_all(self):
+    def restate_for_all(self):
         
         for individu in self.population:
             if type(individu.touch) != str and individu.touch is not None :
-                self.Restate(individu)
+                self.restate(individu)
             elif individu.touch is None :
                 if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
                     individu.etat = "Immunise"
                     individu.hit_time = 0
                     self.immunises +=1
                     self.infectes-=1
-
-    def Restate(self,individu):
+                if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #compléxation du covid apparaissent 6 jours aprés l'infection
+                    State= np.random.binomial(1,gaussienne(individu.maladie.lethalite))#lethalité entre 0.1% et 1% 
+                    if State ==1 :
+                        self.morts +=1
+                        self.infectes -=1
+                        self.population.pop(individu)
+    
+    def restate(self,individu):
         
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
-            State = np.random.binomial(1,individu.touch.maladie.Taux_contagion)
+            
+            
+            
+            State = np.random.binomial(1,gaussienne(individu.touch.maladie.Taux_contagion))
             if State == 1 :
                 maladie = individu.touch.maladie
-                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite)
+                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite,maladie.lethalite)
+                individu.maladie.mutate()
                 individu.etat = "Infecte"
                 self.sains -= 1
                 self.infectes += 1
@@ -166,13 +176,7 @@ class Simulation :
             self.immunises +=1
             self.sains +=1
             self.infectes-=1
-        if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #compléxation du covid apparaissent 6 jours aprés l'infection
-            State= np.random.binomial(1,individu.maladie.lethalite)#lethalité entre 0.1% et 1% 
-            if State ==1 :
-                self.morts +=1
-                self.infectes -=1
-                self.population.pop(individu)
-
+        
         # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
         #     individu.Maladie.hit_time = Simulation.time
 
@@ -183,7 +187,4 @@ def collision(cercle1,cercle2):
     if alg.distance(cercle1,cercle2) < (rayon_1 + rayon_2) :
         return True
     else:
-        return False
-
-
-    
+        return False    
