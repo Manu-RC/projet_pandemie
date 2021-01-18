@@ -35,3 +35,4 @@ def loi_isolement(I_1):
         return I_1.vx,I_1.vy
 
 
+
