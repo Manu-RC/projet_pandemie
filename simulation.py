@@ -2,7 +2,7 @@ import numpy as np
 from individu import Individu
 import physique
 import algebre as alg
-from Maladie import Maladie
+from Maladie import Maladie,gaussienne
 import politique
 
 
@@ -88,6 +88,8 @@ class Simulation :
             politique.pas_de_politique(self)
         self.historique.append([self.time,self.sains,self.infectes,self.immunises,self.morts])
 
+
+        
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
         wanted_speed = self.time_increment*var
@@ -138,10 +140,21 @@ class Simulation :
                     self.immunises +=1
                     self.infectes-=1
 
+                if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #compléxation du covid apparaissent 6 jours aprés l'infection
+                    State= np.random.binomial(1,gaussienne(individu.maladie.lethalite))#lethalité entre 0.1% et 1% 
+                    if State ==1 :
+                        self.morts +=1
+                        self.infectes -=1
+                        self.population.pop(individu)
+
+
     def restate(self,individu):
         
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
-            State = np.random.binomial(1,individu.touch.maladie.Taux_contagion)
+            
+            
+            
+            State = np.random.binomial(1,gaussienne(individu.touch.maladie.Taux_contagion))
             if State == 1 :
                 maladie = individu.touch.maladie
                 individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite,maladie.lethalite)
@@ -165,13 +178,7 @@ class Simulation :
             self.immunises +=1
             self.sains +=1
             self.infectes-=1
-        if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) == individu.maladie.Duree_transmissibilite//2 : #compléxation du covid apparaissent 6 jours aprés l'infection
-            State= np.random.binomial(1,individu.maladie.lethalite)#lethalité entre 0.1% et 1% 
-            if State ==1 :
-                self.morts +=1
-                self.infectes -=1
-                self.population.pop(individu)
-
+        
         # if (individu.etat == "Rétabli" and individu.Maladie.hit_time == 0) and (individu.collision.etat == "Infécté" or (individu.collision.etat == "Rétabli" and hit_timeframe < individu.Maladie.Durée_transmissibilité and hit_timeframe != Simulation.time)) :
         #     individu.Maladie.hit_time = Simulation.time
 

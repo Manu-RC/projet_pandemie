@@ -1,5 +1,12 @@
 import numpy as np
 
+def gaussienne(facteur):
+	proba = 0.1*np.random.randn()+facteur #on recentre la loi normale
+	if proba > 1 :return facteur
+	return proba
+
+
+
 class Maladie:
 
 	def __init__(self,hit_time,Taux_contagion,Taux_mutation,Duree_transmissibilite,lethalite):
