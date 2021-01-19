@@ -8,27 +8,24 @@ class Individu:
     Un individu est défini par sa position (x,y), sa vitesse de déplacement et sa taille modilisé par un rayon
     """
 
-    def __init__(self, rayon, x, y, vx, vy, simulation, maladie=None, masse=1):  # j'ai modifié les entrees car il n'y avait pas vx et vy
+    def __init__(self, rayon, x, y, vx, vy, simulation,taux_respect_rules, maladie=None, masse=1):  # j'ai modifié les entrees car il n'y avait pas vx et vy
         self.rayon = rayon
         self.x = x
         self.y = y
         self.vx = vx
         self.vy = vy
-        self.ax = 0  # Prise en compte de l'accélaration dans le calcul de la position
-        self.ay = 0  # Permet d'atténuer le décalage entre l'image et les calcul de la simu
         self.simulation = simulation
         self.touch = None
         self.masse = masse
         self.etat = "Sain"  # "Sain" "Infecte" ou "Immunise" (les morts sont supprimés de la population)
         self.maladie = maladie
+        self.taux_respect_rules = taux_respect_rules
 
     def __repr__(self):
         return "position x : {0:02f} \n " \
         "position y : {1:02f} \n " \
         "vitesse vx : {2:02f} \n " \
         "vitesse vy : {3:02f} \n " \
-        "acceleration ax : {4:02f} \n " \
-        "acceleration ay : {5:02f} \n " \
         "my touch   : {6} \n" \
         "------------------------ \n ".format(self.x,self.y,self.vx,self.vy,self.ax,self.ay,self.touch)
 
@@ -50,11 +47,6 @@ class Individu:
         """affecte un nouveau vecteur vitesse"""
         self.vx = vx
         self.vy = vy
-
-    def set_acceleration(self, vx, vy):
-        dt = self.simulation.time_increment
-        self.ax = (vx - self.vx) / dt
-        self.ay = (vy - self.vy) / dt
 
     def move(self, x_max, y_max):
         # Mise à jour de la vitesse et position en cas de contact avec le mur de droite ou de gauche
@@ -99,10 +91,12 @@ class Individu:
 
     def move_contact(self):
         u1, v1, u2, v2 = physique.collision_particule(self, self.touch)
+        # Mise à jour des vitesses des 2 individus à la fois
         self.set_vitesse(u1, v1)
         self.touch.set_vitesse(u2, v2)
         self.set_position(self.x, self.y)
         self.touch.set_position(self.touch.x, self.touch.y)
+        # On ne recalule pas la physique de collision avec l'individu 2 
         self.touch.touch = "done"
 
     def move_corner(self, x_max, y_max):
@@ -117,9 +111,9 @@ class Individu:
         elif self.touch == "down-right_corner":
             self.set_position(x_max - self.rayon, y_max - self.rayon)
 
-    def move_reinit(self, x_max, y_max):
+    def move_reinit(self, x_max, y_max, vitesse_init):
         if self.vx == 0 and self.vy == 0:
-            u, v = physique.init_vitesse()
+            u, v = physique.init_vitesse(vitesse_init)
             self.set_vitesse(u, v)
         self.move(x_max, y_max)
 
