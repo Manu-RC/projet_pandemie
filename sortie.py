@@ -2,22 +2,22 @@ import matplotlib.pyplot as plt
 from fenetre_graphique import Ui_Pandemie
 from universe import Universe 
 from simulation import Simulation
-from Maladie import Maladie
 from PyQt5 import QtCore, QtGui, QtWidgets
 from individu import Individu
-import politique
+
 
 
 class Sortie : 
 
-    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init):
+    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init,borne_vitesse_init,taux_respect_rules):
 
         self.ui = Ui_Pandemie()
         
+        #setup des différents paramètres de la simulation 
         self.universe_width = dimension_y
         self.universe_height = dimension_x
-        self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
-        self.simulation.generation(rayon,nombre_individus,nombre_contamines_init)
+        self.simulation = Simulation(dimension_x,dimension_y,maladie_init,borne_vitesse_init)
+        self.simulation.generation(rayon,nombre_individus,nombre_contamines_init,taux_respect_rules)
         self.refresh_time = refresh_time
         
         #connexion de la scene de l'univers au widget
@@ -41,7 +41,6 @@ class Sortie :
         #connexion des boutons d'accélération et de décélération de la simulation
         self.ui.x2.clicked.connect(self.x2)
         self.ui.x4.clicked.connect(self.x4)
-
         self.ui.reduce_speed_x4.clicked.connect(self.reduce_speed_x4)
         self.ui.reduce_speed_x2.clicked.connect(self.reduce_speed_x2)
 
@@ -101,7 +100,7 @@ class Sortie :
             open_history(self.simulation)
         else:
             close_history()
-        # open_history(self.simulation)
+
     
     
 
@@ -138,9 +137,9 @@ class Sortie :
         self.simulation.change_speed(0.5)
 
     def choice_politique(self):
-        if self.ui.choice_politique.currentText() == "Confinement":
-            self.simulation.politique = "confinement"
-        if self.ui.choice_politique.currentText() == "Couvre-feu":
+        if self.ui.choice_politique.currentText() == "Isolement":
+            self.simulation.politique = "isolement"
+        elif self.ui.choice_politique.currentText() == "Couvre-feu":
             self.simulation.politique = "couvre-feu"
         else:
             self.simulation.politique = None
@@ -155,14 +154,17 @@ def open_history(simulation):
             time = []
             sains = []
             infectes = []
+            immunises = []
             morts = []
             for etat in simulation.historique:
                 time.append(etat[0])
                 sains.append(etat[1])
                 infectes.append(etat[2])
-                morts.append(etat[3])
+                immunises.append(etat[3])
+                morts.append(etat[4])
             plt.plot(time,sains,color="green")
             plt.plot(time,infectes,color="red")
+            plt.plot(time,immunises,color="yellow")
             plt.plot(time,morts,color="black")
 
         plt.title = "Historique de la simulation"
