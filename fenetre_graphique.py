@@ -175,7 +175,7 @@ class Ui_Pandemie(object):
         self.x2.setText(_translate("Pandemie", ">"))
         self.x4.setText(_translate("Pandemie", ">>"))
         self.choice_politique.setItemText(0, _translate("Pandemie", "Vie normale"))
-        self.choice_politique.setItemText(1, _translate("Pandemie", "Confinement"))
+        self.choice_politique.setItemText(1, _translate("Pandemie", "Isolement"))
         self.choice_politique.setItemText(2, _translate("Pandemie", "Couvre-feu"))
         self.Graph_button.setText(_translate("Pandemie", "Graph"))
 

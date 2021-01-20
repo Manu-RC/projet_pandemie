@@ -139,6 +139,7 @@ class Simulation :
                     individu.hit_time = 0
                     self.immunises +=1
                     self.infectes-=1
+                    
                 elif individu.etat == "Infecte" and (individu.maladie.Duree_transmissibilite//2-(self.time - individu.maladie.hit_time)) <= self.time_increment : #complication du covid apparaissent 6 jours aprés l'inféction 
                     State= np.random.binomial(1,gaussienne(individu.maladie.lethalite))#letalité avec une distribution gaussienne autour de la letalité choisie
                     if State ==1 :
@@ -147,8 +148,9 @@ class Simulation :
                         index = self.population.index(individu)
                         self.population.pop(index)
     
+
     def restate(self,individu):#met à jour l'état de chaque individu en contact
-        
+
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
             State = np.random.binomial(1,gaussienne(individu.touch.maladie.Taux_contagion))
             if State == 1 :
@@ -158,9 +160,6 @@ class Simulation :
                 individu.etat = "Infecte"
                 self.sains -= 1
                 self.infectes += 1
-
-        
-        
 
 def collision(cercle1,cercle2):
 
