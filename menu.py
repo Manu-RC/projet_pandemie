@@ -76,6 +76,18 @@ canvas = tkinter.Canvas(menu_principal, width=150, height=150, bg="#E9F273", bd=
 canvas.create_image(100, 100, image=image)
 canvas.pack(expand="YES", fill="y", side="top")
 
+# Creation du titre principal
+titre_principal = "Simulateur de propagation de maladie"
+bg_titre = "#E9F273"
+fg_titre = "black"
+size_titre   = 30
+police_titre = "arial"
+font_titre_principal = (police_titre,size_titre)
+expand_titre = "YES"
+
+label_title = tkinter.Label(menu_principal,text=titre_principal, font=font_titre_principal, bg=bg_titre, fg=fg_titre)
+label_title.pack(expand=expand_titre)
+
 # creation des Frames
 bg_frame =  "#E9F273"
 bd_frame = 5
@@ -91,18 +103,6 @@ frame_domaine.pack(side="right", fill="y")
 frame_maladie = tkinter.Frame(menu_principal, bg=bg_frame, bd=bd_frame, relief=relief_frame)
 frame_maladie.pack(side="left", fill="y")
 
-# Creation du titre principal
-titre_principal = "Simulateur de propagation de maladie"
-bg_titre = "#E9F273"
-fg_titre = "black"
-size_titre   = 30
-police_titre = "arial"
-font_titre_principal = (police_titre,size_titre)
-expand_titre = "TRUE"
-
-label_title = tkinter.Label(menu_principal,text=titre_principal, font=font_titre_principal, bg=bg_titre, fg=fg_titre)
-label_title.pack(expand=expand_titre)
-
 # Parametre des sous titre
 size_st = 20
 police_st = "arial"
@@ -114,8 +114,8 @@ titre_domaine = "Choix du domaine"
 titre_pop = "Paramètres sur la population"
 titre_maladie = "Paramètre sur la maladie"
 titre_lancer = "Démarrer la simulation"
-expand_pop_titre = "TRUE"
-expand_maladie_titre = "TRUE"
+expand_pop_titre = "YES"
+expand_maladie_titre = "YES"
 side_lancer = "left"
 
 label_domaine    = tkinter.Label(frame_domaine, text=titre_domaine, font=font_st, bg=bg_st, fg=fg_st)
@@ -128,7 +128,7 @@ label_lancer     = tkinter.Label(frame_lancer, text=titre_lancer, font=font_st, 
 label_lancer.pack(side=side_lancer)
 
 #Valeur initiales des variables de controle
-valeur_init_domaine = 600
+valeur_init_domaine = 550
 valeur_init_pop_totale = 90
 valeur_init_pop_contamine = 30
 valeur_init_vitesse = 2
@@ -137,7 +137,7 @@ valeur_init_hit_time = 0
 valeur_init_taux_contagion = 0.5
 valeur_init_mutation = 0.1
 valeur_init_duree_transmissibilite = 200
-valeur_init_letalite = 1
+valeur_init_letalite = 0.1
 
 
 # Création des variables de controles
