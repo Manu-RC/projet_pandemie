@@ -29,7 +29,12 @@ def lancement():
     population_malade = population_contamine.get()
     vitesse_borne_init = vitesse_init.get()
     taux_rules_respect = rules_respect.get()
-    main.main(longueur,largeur,population,population_malade,vitesse_borne_init,taux_rules_respect)
+    hit_time_init = hit_time.get()
+    taux_contagion_init = taux_contagion.get()
+    mutation_init = mutation.get()
+    letalite_init = letalite.get()
+    duree_transmisibilite_init = duree_transmisibilite.get()
+    main.main(longueur,largeur,population,population_malade,vitesse_borne_init,taux_rules_respect,hit_time_init,taux_contagion_init,mutation_init,duree_transmisibilite_init,letalite_init)
 
 def update_x(*args):
     axe_x.set(axe_x.get())
@@ -87,13 +92,13 @@ label_population.pack(expand="YES")
 population_totale = tkinter.IntVar()
 population_totale.trace("w",update_label)
 population_totale.set(90)
-pop_entry = tkinter.Scale(frame_pop,orient='horizontal', from_=2, to=100, length=250, label="population totale", variable=population_totale, font=("arial",15), fg="black", bg='#AF000C', activebackground="red", command=update_label(population_totale))
+pop_entry = tkinter.Scale(frame_pop,orient='horizontal', from_=50, to=100, length=250, label="population totale", variable=population_totale, font=("arial",15), fg="black", bg='#AF000C', activebackground="red", command=update_label(population_totale))
 pop_entry.pack(side="left")
 
 population_contamine = tkinter.IntVar()
 population_contamine.trace("w",update_population_mal)
 population_contamine.set(30)
-pop_sick =  tkinter.Scale(frame_pop,orient='horizontal', from_=2, to=99, length=250, label="population contaminée", variable=population_contamine, font=("arial",15), fg="black", bg='#AF000C', activebackground="red", command=update_population_mal(population_contamine))
+pop_sick =  tkinter.Scale(frame_pop,orient='horizontal', from_=2, to=48, length=250, label="population contaminée", variable=population_contamine, font=("arial",15), fg="black", bg='#AF000C', activebackground="red", command=update_population_mal(population_contamine))
 pop_sick.pack(side="left")
 
 
@@ -133,7 +138,7 @@ mutation_entry.pack()
 duree_transmisibilite = tkinter.IntVar()
 duree_transmisibilite.trace("w",update_duree_transmisibilite)
 duree_transmisibilite.set(200)
-duree_transmisibilite_entry = tkinter.Scale(frame_maladie, orient="horizontal", from_=0, to=1000, length=200, label="duree de transmisibilité", variable=duree_transmisibilite, font=("arial",10), fg="black", bg='#AF000C', activebackground="red", command=update_duree_transmisibilite(duree_transmisibilite))
+duree_transmisibilite_entry = tkinter.Scale(frame_maladie, orient="horizontal", from_=0, to=200, length=200, label="duree de transmisibilité", variable=duree_transmisibilite, font=("arial",10), fg="black", bg='#AF000C', activebackground="red", command=update_duree_transmisibilite(duree_transmisibilite))
 duree_transmisibilite_entry.pack()
 
 letalite = tkinter.DoubleVar()
