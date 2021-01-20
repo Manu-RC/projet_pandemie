@@ -1,8 +1,7 @@
-import numpy as np
 from individu import Individu
 import physique
 import algebre as alg
-from Maladie import Maladie,gaussienne
+from maladie import Maladie
 import politique
 
 
@@ -88,8 +87,6 @@ class Simulation :
         else:
             politique.pas_de_politique(self)
         self.historique.append([self.time,self.sains,self.infectes,self.immunises,self.morts])
-
-
         
     def change_speed(self,var): #change la vitesse de réalisation de la simulation 
         """ Change la vitesse de réalisation de la simulation """
@@ -99,7 +96,7 @@ class Simulation :
 
     def generation(self,rayon,nb_particule,nombre_contamines,taux_respect_rules):
 
-        np.random.seed(3)
+        alg.seed()   # Initialisation de generateur aléatoire avec une graine ici de l'horloge système
         x_particules = nb_particule // 2
         y_particules = nb_particule - x_particules
         pas_x = int(self.x_max / (2 * x_particules))
@@ -135,35 +132,33 @@ class Simulation :
             if type(individu.touch) != str and individu.touch is not None :
                 self.restate(individu)
             elif individu.touch is None :
-                if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
+                if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.duree_transmissibilite :
                     individu.etat = "Immunise"
                     individu.hit_time = 0
                     self.immunises +=1
                     self.infectes-=1
-
-                    
-                elif individu.etat == "Infecte" and (individu.maladie.Duree_transmissibilite//2-(self.time - individu.maladie.hit_time)) <= self.time_increment : #complication du covid apparaissent 6 jours aprés l'inféction 
-                    State= np.random.binomial(1,gaussienne(individu.maladie.lethalite))#letalité avec une distribution gaussienne autour de la letalité choisie
-                    if State ==1 :
-                        self.morts +=1
-                        self.infectes -=1
-                        index = self.population.index(individu)
-                        self.population.pop(index)
-                    #State = alg.uniform(0,1)
-                    #if State < individu.maladie.lethalite :    # Mettre letalite ici
+                elif individu.etat == "Infecte" and (individu.maladie.duree_transmissibilite//2-(self.time - individu.maladie.hit_time)) <= self.time_increment : #complication du covid apparaissent 6 jours aprés l'inféction
+                    #state= np.random.binomial(1,alg.gaussienne(individu.maladie.letalite)) #letalité avec une distribution gaussienne autour de la letalité choisie
+                    #if state ==1 :
                         #self.morts +=1
                         #self.infectes -=1
                         #index = self.population.index(individu)
                         #self.population.pop(index)
-   
-  
-    def restate(self,individu):#met à jour l'état de chaque individu en contact
+                    state = alg.uniform(0,1)
+                    if state < individu.maladie.letalite :    # Mettre letalite ici
+                        self.morts +=1
+                        self.infectes -=1
+                        index = self.population.index(individu)
+                        self.population.pop(index)
+
+    def restate(self,individu): #met à jour l'état de chaque individu en contact
+        """Met à jour l'etat de chaque individu en contact"""
 
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
-            State = np.random.binomial(1,gaussienne(individu.touch.maladie.Taux_contagion))
-            if State == 1 :
+            state = alg.binomiale(alg.gaussienne(individu.touch.maladie.taux_contagion))
+            if state == 1 :
                 maladie = individu.touch.maladie
-                individu.maladie = Maladie(self.time,maladie.Taux_contagion,maladie.Taux_mutation,maladie.Duree_transmissibilite,maladie.lethalite)
+                individu.maladie = Maladie(self.time,maladie.taux_contagion,maladie.taux_mutation,maladie.duree_transmissibilite,maladie.letalite)
                 individu.maladie.mutate()
                 individu.etat = "Infecte"
                 self.sains -= 1

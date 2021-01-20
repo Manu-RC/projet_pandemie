@@ -11,6 +11,11 @@ def gaussienne(facteur):
 	if proba > 1 : return facteur
 	return proba
 
+def seed():
+    np.random.seed()
+    
+def binomiale(p):
+     return np.random.binomial(1, p)
 
 def distance(cercle_1,cercle_2):
     """ Entrée : un couple (position x, position y, rayon)

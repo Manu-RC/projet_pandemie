@@ -1,4 +1,3 @@
-import numpy
 import physique
 import simulation
 
@@ -6,9 +5,11 @@ import simulation
 class Individu:
     """Initialisation d'un individu
     Un individu est défini par sa position (x,y), sa vitesse de déplacement et sa taille modilisé par un rayon
+    Les parametres de la simulation sont aussi fournit par l'attribut simulation qui une instantiation de classe simulation
+    On supposera dans notre modèle que chaque individu est masse unitaire
     """
 
-    def __init__(self, rayon, x, y, vx, vy, simulation,taux_respect_rules, maladie=None, masse=1):  # j'ai modifié les entrees car il n'y avait pas vx et vy
+    def __init__(self, rayon, x, y, vx, vy, simulation,taux_respect_rules, maladie=None, masse=1):  
         self.rayon = rayon
         self.x = x
         self.y = y
@@ -49,6 +50,7 @@ class Individu:
         self.vy = vy
 
     def move(self, x_max, y_max):
+        """Gestion du mouvement en fonction de la condition initiale touch (defini dans simulation)"""
         # Mise à jour de la vitesse et position en cas de contact avec le mur de droite ou de gauche
         if self.touch in ["left_wall", "right_wall"]:
             self.move_vertical_wall(x_max)
@@ -112,6 +114,7 @@ class Individu:
             self.set_position(x_max - self.rayon, y_max - self.rayon)
 
     def move_reinit(self, x_max, y_max, vitesse_init):
+        # Redemmarrage des particules qui ont respecté leur isolement et que les conditions d'isolement sont finies (cf politique.py et physique.py) 
         if self.vx == 0 and self.vy == 0:
             u, v = physique.init_vitesse(vitesse_init)
             self.set_vitesse(u, v)
