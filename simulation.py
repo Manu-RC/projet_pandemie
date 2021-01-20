@@ -129,7 +129,7 @@ class Simulation :
         self.infectes = nombre_contamines
         self.sains = len(self.population)-self.infectes-self.immunises
         
-    def restate_for_all(self):
+    def restate_for_all(self): #garde l'historique de tous les individus et met à jour leur état
         
         for individu in self.population:
             if type(individu.touch) != str and individu.touch is not None :
@@ -140,17 +140,24 @@ class Simulation :
                     individu.hit_time = 0
                     self.immunises +=1
                     self.infectes-=1
-                elif individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) < individu.maladie.Duree_transmissibilite//2 : #complication du covid apparaissent 6 jours aprés l'infection
-                    #State= np.random.binomial(1,0.5)#lethalité entre 0.1% et 1%
-                    State = alg.uniform(0,1)
-                    if State < 0.001 :    # Mettre letalite ici
+
+                    
+                elif individu.etat == "Infecte" and (individu.maladie.Duree_transmissibilite//2-(self.time - individu.maladie.hit_time)) <= self.time_increment : #complication du covid apparaissent 6 jours aprés l'inféction 
+                    State= np.random.binomial(1,gaussienne(individu.maladie.lethalite))#letalité avec une distribution gaussienne autour de la letalité choisie
+                    if State ==1 :
                         self.morts +=1
                         self.infectes -=1
                         index = self.population.index(individu)
                         self.population.pop(index)
-    
-    def restate(self,individu):
-        
+                    #State = alg.uniform(0,1)
+                    #if State < individu.maladie.lethalite :    # Mettre letalite ici
+                        #self.morts +=1
+                        #self.infectes -=1
+                        #index = self.population.index(individu)
+                        #self.population.pop(index)
+
+    def restate(self,individu):#met à jour l'état de chaque individu en contact
+
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
             State = np.random.binomial(1,gaussienne(individu.touch.maladie.Taux_contagion))
             if State == 1 :
@@ -160,14 +167,6 @@ class Simulation :
                 individu.etat = "Infecte"
                 self.sains -= 1
                 self.infectes += 1
-
-        elif individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.Duree_transmissibilite :
-            individu.etat = "Immunise"
-            individu.hit_time = 0
-            self.immunises +=1
-            self.sains +=1
-            self.infectes-=1
-        
 
 def collision(cercle1,cercle2):
 
