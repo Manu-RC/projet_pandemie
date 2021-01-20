@@ -9,15 +9,15 @@ from individu import Individu
 
 class Sortie : 
 
-    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init):
+    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init,borne_vitesse_init,taux_respect_rules):
 
         self.ui = Ui_Pandemie()
         
         #setup des différents paramètres de la simulation 
         self.universe_width = dimension_y
         self.universe_height = dimension_x
-        self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
-        self.simulation.generation(rayon,nombre_individus,nombre_contamines_init)
+        self.simulation = Simulation(dimension_x,dimension_y,maladie_init,borne_vitesse_init)
+        self.simulation.generation(rayon,nombre_individus,nombre_contamines_init,taux_respect_rules)
         self.refresh_time = refresh_time
         
         #connexion de la scene de l'univers au widget
@@ -137,9 +137,9 @@ class Sortie :
         self.simulation.change_speed(0.5)
 
     def choice_politique(self):
-        if self.ui.choice_politique.currentText() == "Confinement":
-            self.simulation.politique = "confinement"
-        if self.ui.choice_politique.currentText() == "Couvre-feu":
+        if self.ui.choice_politique.currentText() == "Isolement":
+            self.simulation.politique = "isolement"
+        elif self.ui.choice_politique.currentText() == "Couvre-feu":
             self.simulation.politique = "couvre-feu"
         else:
             self.simulation.politique = None

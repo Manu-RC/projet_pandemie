@@ -33,3 +33,5 @@ class Maladie:#la classe où sont stockés tous les parametres de la maladie
 
 
 
+
+

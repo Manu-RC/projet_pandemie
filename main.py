@@ -4,7 +4,7 @@ import sys
 from PyQt5 import QtWidgets
 
 
-def main(longueur,largeur,nombre_individus,nombre_contamines_init):
+def main(longueur,largeur,nombre_individus,nombre_contamines_init,borne_vitesse_init,taux_respect_rules):
 
     #maladie initiale
     hit_time = 0
@@ -19,7 +19,7 @@ def main(longueur,largeur,nombre_individus,nombre_contamines_init):
 
     app = QtWidgets.QApplication(sys.argv)
     
-    out = Sortie(longueur,largeur,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init)
+    out = Sortie(longueur,largeur,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init,borne_vitesse_init,taux_respect_rules)
 
     out.univers.show()
     sys.exit(app.exec_())
