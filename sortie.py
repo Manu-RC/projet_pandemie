@@ -9,15 +9,15 @@ from individu import Individu
 
 class Sortie : 
 
-    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init):
+    def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init,borne_vitesse_init,taux_respect_rules):
 
         self.ui = Ui_Pandemie()
         
         #setup des différents paramètres de la simulation 
         self.universe_width = dimension_y
         self.universe_height = dimension_x
-        self.simulation = Simulation(dimension_x,dimension_y,maladie_init)
-        self.simulation.generation(rayon,nombre_individus,nombre_contamines_init)
+        self.simulation = Simulation(dimension_x,dimension_y,maladie_init,borne_vitesse_init)
+        self.simulation.generation(rayon,nombre_individus,nombre_contamines_init,taux_respect_rules)
         self.refresh_time = refresh_time
         
         #connexion de la scene de l'univers au widget
@@ -26,10 +26,6 @@ class Sortie :
         self.ui.graphicsView.setScene(self.univers.scene)
         self.fit_scene_in_view()
         self.set_simu()
-
-
-
-        
 
         #connexion du timer à l'evolution de la simulation
         self.univers.timer.timeout.connect(self.update_simu)
@@ -60,7 +56,6 @@ class Sortie :
         simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
         for individu in self.simulation.population:
-
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
             if individu.etat == "Infecte":
@@ -84,7 +79,6 @@ class Sortie :
         simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
         for individu in self.simulation.population:
-
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
             item = QtWidgets.QGraphicsEllipseItem(bounds, group)
             if individu.etat == "Infecte":
@@ -93,16 +87,12 @@ class Sortie :
                 item.setBrush(QtGui.QBrush(QtGui.QColor("yellow")))
             else:
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
-    
 
     def open_close_history(self):
         if not(open_history.has_been_called):
             open_history(self.simulation)
         else:
             close_history()
-
-    
-    
 
     def playpause(self):
         """this slot toggles the replay using the timer as model"""
@@ -111,17 +101,12 @@ class Sortie :
         else:
             self.univers.timer.start(self.refresh_time)
 
-
     def start(self):
-
         if not self.univers.timer.isActive():
-
             self.univers.timer.start(self.refresh_time)
 
     def stop(self):
-
         if self.univers.timer.isActive():
-
             self.univers.timer.stop()
 
     def x2(self):
@@ -137,9 +122,9 @@ class Sortie :
         self.simulation.change_speed(0.5)
 
     def choice_politique(self):
-        if self.ui.choice_politique.currentText() == "Confinement":
-            self.simulation.politique = "confinement"
-        if self.ui.choice_politique.currentText() == "Couvre-feu":
+        if self.ui.choice_politique.currentText() == "Isolement":
+            self.simulation.politique = "isolement"
+        elif self.ui.choice_politique.currentText() == "Couvre-feu":
             self.simulation.politique = "couvre-feu"
         else:
             self.simulation.politique = None
