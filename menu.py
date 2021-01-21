@@ -229,7 +229,7 @@ debut_axe_vitesse = 0
 fin_axe_vitesse = 2.5
 
 pop_entry = tkinter.Scale(frame_pop, orient='horizontal', label=titre_pop_totale,from_=debut_axe_pop_tot, to_=fin_axe_pop_tot, resolution=resolution_int, length=length_axe_pop, variable=population_totale, font=font_pop, fg=fg_scale, bg=bg_scale, command=update_population_tot(population_totale))
-pop_sick_entry = tkinter.Scale(frame_pop, orient='horizontal', label=titre_pop_totale, from_=debut_axe_pop_sick, to_=fin_axe_pop_sick, resolution=resolution_int, length=length_axe_pop, variable=population_contamine, font=font_pop, fg=fg_scale, bg=bg_scale, command=update_population_mal(population_contamine))
+pop_sick_entry = tkinter.Scale(frame_pop, orient='horizontal', label=titre_pop_contaminee, from_=debut_axe_pop_sick, to_=fin_axe_pop_sick, resolution=resolution_int, length=length_axe_pop, variable=population_contamine, font=font_pop, fg=fg_scale, bg=bg_scale, command=update_population_mal(population_contamine))
 vitesse_init_entry = tkinter.Scale(frame_pop, orient='horizontal', label=titre_vitesse, from_=debut_axe_vitesse, to_=fin_axe_vitesse, resolution=resolution_int, length=length_axe_pop, variable=vitesse_init, font=font_pop, fg=fg_scale, bg=bg_scale, commande=update_borne_vitesse(vitesse_init))
 rules_respect_entry = tkinter.Scale(frame_pop, orient='horizontal', label=titre_respect, from_=debut_valeur_taux, to_=fin_valeur_taux, resolution=resolution_taux, length=length_axe_pop, variable=rules_respect,font=font_pop, fg=fg_scale, bg=bg_scale, command=update_rules_respect(rules_respect))
 pop_entry.pack(side=side_pop_global)
