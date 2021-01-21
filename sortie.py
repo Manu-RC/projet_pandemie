@@ -9,6 +9,8 @@ from individu import Individu
 
 class Sortie : 
 
+    """Classe qui connecte la scène au widget, initialise une simulation et gère tout le côté graphique"""
+
     def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init,borne_vitesse_init,taux_respect_rules):
 
         self.ui = Ui_Pandemie()
@@ -50,7 +52,7 @@ class Sortie :
         self.ui.graphicsView.fitInView(self.ui.graphicsView.sceneRect(), QtCore.Qt.KeepAspectRatio)
 
     def set_simu(self):
-
+        """Initialise visuellement la simulation"""
         group = QtWidgets.QGraphicsItemGroup()
         self.univers.scene.addItem(group)
         simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
@@ -66,7 +68,7 @@ class Sortie :
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
 
     def update_simu(self):  
-        """met à jour visuellement les différents états de la simulation """
+        """Met à jour visuellement les différents états de la simulation """
         self.simulation.advance()
         self.univers.scene.clear()
         self.ui.Compteur_infectes.display(self.simulation.infectes)
@@ -89,39 +91,40 @@ class Sortie :
                 item.setBrush(QtGui.QBrush(QtGui.QColor("green")))
 
     def open_close_history(self):
+        """Gère l'ouverture ou la fermeture du graphique"""
         if not(open_history.has_been_called):
             open_history(self.simulation)
         else:
             close_history()
 
-    def playpause(self):
-        """this slot toggles the replay using the timer as model"""
-        if self.univers.timer.isActive():
-            self.univers.timer.stop()
-        else:
-            self.univers.timer.start(self.refresh_time)
-
     def start(self):
+        """Démarre la simulation"""
         if not self.univers.timer.isActive():
             self.univers.timer.start(self.refresh_time)
 
     def stop(self):
+        """Arrête la simulatio"""
         if self.univers.timer.isActive():
             self.univers.timer.stop()
 
     def x2(self):
+        """Accélère la simulation en doublant la vitesse"""
         self.simulation.change_speed(2)
 
     def x4(self):
+        """Accélère en quadruplant la vitesse"""
         self.simulation.change_speed(4)
 
     def reduce_speed_x4(self):
+        """Ralentis en divisant par 4 la vitesse"""
         self.simulation.change_speed(0.25)
 
     def reduce_speed_x2(self):
+        """Ralentis en divisant par 2 la vitesse"""
         self.simulation.change_speed(0.5)
 
     def choice_politique(self):
+        """Change la politique de la simulation lorsque l'option du menu sélectionné change"""
         if self.ui.choice_politique.currentText() == "Isolement":
             self.simulation.politique = "isolement"
         elif self.ui.choice_politique.currentText() == "Couvre-feu":
@@ -133,7 +136,7 @@ class Sortie :
 "----------------------------------------------------------- POUR LE GRAPHE"
 
 def open_history(simulation): 
-        """affiche les courbes représentant l'historique de la simulation"""
+        """Affiche les courbes représentant l'historique de la simulation"""
         open_history.has_been_called=True
         def plot_current_state():
             time = []
@@ -164,7 +167,7 @@ def open_history(simulation):
 open_history.has_been_called=False  
 
 def close_history():
-    """permet de signaler à open_history quand est ce que l'utilisateur veut fermer le graphe"""               
+    """Permet de signaler à open_history quand est ce que l'utilisateur veut fermer le graphe"""               
     close_history.has_been_called=True
     open_history.has_been_called=False
     pass
