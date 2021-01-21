@@ -4,9 +4,11 @@ import sys
 from PyQt5 import QtWidgets
 
 
-def main(longueur,largeur,nombre_individus,nombre_contamines_init,borne_vitesse_init,taux_respect_rules,hit_time,taux_contagion,mutation_init,duree_transmissibilite_init,letalite):
+def main(longueur,largeur,nombre_individus,nombre_contamines_init,borne_vitesse_init,taux_respect_rules,taux_contagion,mutation_init,duree_transmissibilite_init,letalite):
 
-    maladie_init = Maladie(hit_time,taux_contagion,mutation_init,duree_transmissibilite_init,letalite)
+    #maladie_init = Maladie(hit_time,taux_contagion,mutation_init,duree_transmissibilite_init,letalite)
+    hit_time = 0
+    maladie_init = Maladie(hit_time, taux_contagion, mutation_init, duree_transmissibilite_init, letalite)
     rayon = 4
     refresh_time = 20 #millisecondes
     app = QtWidgets.QApplication(sys.argv)
