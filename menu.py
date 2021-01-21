@@ -37,8 +37,8 @@ def update_population_tot(*args):
 def update_population_mal(*args):
     population_contamine.set(population_contamine.get())
 
-def update_hit_time(*args):
-    hit_time.set(hit_time.get())
+# def update_hit_time(*args):
+#     hit_time.set(hit_time.get())
 
 def update_taux_contagion(*args):
     taux_contagion.set(taux_contagion.get())
