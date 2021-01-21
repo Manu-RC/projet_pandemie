@@ -132,24 +132,25 @@ class Simulation :
             if type(individu.touch) != str and individu.touch is not None :
                 self.restate(individu)
             elif individu.touch is None :
-                if individu.etat == "Infecte" and (self.time - individu.maladie.hit_time) > individu.maladie.duree_transmissibilite :
-                    individu.etat = "Immunise"
-                    individu.hit_time = 0
-                    self.immunises +=1
-                    self.infectes-=1
-                elif individu.etat == "Infecte" and (individu.maladie.duree_transmissibilite//2-(self.time - individu.maladie.hit_time)) <= self.time_increment : #complication du covid apparaissent 6 jours aprés l'inféction
-                    #state= np.random.binomial(1,alg.gaussienne(individu.maladie.letalite)) #letalité avec une distribution gaussienne autour de la letalité choisie
-                    #if state ==1 :
+                if individu.etat == "Infecte":
+                    temps_passe_malade = self.time - individu.maladie.hit_time
+                    if temps_passe_malade > individu.maladie.duree_transmissibilite:
+                        individu.etat = "Immunise"
+                        self.immunises +=1
+                        self.infectes-=1
+                    else: 
+                        state = alg.binomiale(alg.gaussienne(individu.maladie.letalite) / individu.maladie.duree_transmissibilite) #letalité avec une distribution gaussienne autour de la letalité choisie
+                        if state == 1:
+                            self.morts +=1
+                            self.infectes -=1
+                            index = self.population.index(individu)
+                            self.population.pop(index)
+                    #state = alg.uniform(0,1)
+                    #if state < individu.maladie.letalite :    # Mettre letalite ici
                         #self.morts +=1
                         #self.infectes -=1
                         #index = self.population.index(individu)
                         #self.population.pop(index)
-                    state = alg.uniform(0,1)
-                    if state < individu.maladie.letalite :    # Mettre letalite ici
-                        self.morts +=1
-                        self.infectes -=1
-                        index = self.population.index(individu)
-                        self.population.pop(index)
 
     def restate(self,individu): #met à jour l'état de chaque individu en contact
         """Met à jour l'etat de chaque individu en contact"""
