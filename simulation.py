@@ -121,6 +121,7 @@ class Simulation :
             else:
                 x = int(alg.uniform(0,nb_particules-i))
                 y = int(alg.uniform(0,nb_particules-i))
+
                 individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules)
                 individu.choix_respect()
                 self.population.append((individu))

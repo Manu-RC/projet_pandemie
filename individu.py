@@ -25,6 +25,7 @@ class Individu:
         self.date_deces = None
         self.respect = None #de type booléen quand il est affecté
 
+
     def __repr__(self):
         return "position x : {0:02f} \n " \
         "position y : {1:02f} \n " \
