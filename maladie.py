@@ -15,12 +15,21 @@ class Maladie:
 		self.taux_mutation = taux_mutation						#Le taux de contagion de la maladie transmise
 		self.duree_transmissibilite = duree_transmissibilite	#la durée où le virus est contagieux
 		self.letalite = letalite								#la létalité du virus 
-	
+		self.date_retablissement = self.hit_time + self.duree_transmissibilite
+
 	def mutate(self):
+		"""Fait muter la maladie"""
 		state = alg.binomiale(self.taux_mutation)
-		if state == 1:
+		if state == 1: #la maladie va muter
 			self.duree_transmissibilite += 0.5 * self.duree_transmissibilite
 			self.taux_mutation -= 0.5 * self.taux_mutation
+
+	def decide_fate(self,individu):
+		"""Décide en fonction de la létalité si un individu doit mourir ou non lors de son temps passé malade"""
+		state = alg.binomiale(alg.gaussienne(self.letalite))
+		if state == 1 : #l'individu doit mourir
+			# on tire au hasard une date entre le moment ou il devient malade et le moment théorique ou il doit guérir
+			individu.date_deces = alg.uniform(self.hit_time,self.date_retablissement) 
 
 
 

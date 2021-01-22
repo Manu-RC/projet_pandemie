@@ -21,6 +21,7 @@ class Individu:
         self.etat = "Sain"  # "Sain" "Infecte" ou "Immunise" (les morts sont supprimés de la population)
         self.maladie = maladie
         self.taux_respect_rules = taux_respect_rules
+        self.date_deces = None
 
     def __repr__(self):
         return "position x : {0:02f} \n " \
@@ -28,7 +29,7 @@ class Individu:
         "vitesse vx : {2:02f} \n " \
         "vitesse vy : {3:02f} \n " \
         "my touch   : {6} \n" \
-        "------------------------ \n ".format(self.x,self.y,self.vx,self.vy,self.ax,self.ay,self.touch)
+        "------------------------ \n ".format(self.x,self.y,self.vx,self.vy,self.touch)
 
     def set_position(self, x, y):
         """met à jour la position (peut être sujet à approximation)"""

@@ -25,9 +25,11 @@ def collision_particule(I_1,I_2):
     return u_estime[0], u_estime[1], v_estime[0], v_estime[1]
 
 def init_vitesse(borne_vitesse):
+    """Initialise le vecteur vitesse des individus"""
     return alg.uniform(-borne_vitesse,borne_vitesse), alg.uniform(-borne_vitesse,borne_vitesse)
 
 def loi_isolement(I_1):
+    """Réajuste le vecteur vitesse des individus pendant l'isolement"""
     choix = alg.uniform(0,1)
     if choix < I_1.taux_respect_rules:
         return 0,0 

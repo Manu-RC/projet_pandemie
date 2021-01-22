@@ -1,6 +1,7 @@
 from individu import Individu
 
 def isolement(simulation):
+    """Réduit fortement les mouvements des individus contaminés"""
     for individu in simulation.population:
         if individu.etat == "Infecte":
             individu.move_isolement(simulation.x_max, simulation.y_max)
@@ -10,8 +11,9 @@ def isolement(simulation):
             individu.move(simulation.x_max, simulation.y_max)
     simulation.time += simulation.time_increment
 
-def couvre_feu(simulation):
-    if (simulation.time % 24) > 18:
+def couvre_feu(simulation): #Manu tu peux commenter pour expliquer grosso modo ce que tu fais ?
+    """Impose un couvre-feu entre 18h et 6h :) """
+    if 6 >= (simulation.time % 24) >= 18:
         for individu in simulation.population:
             individu.move_couvre_feu(simulation.x_max, simulation.y_max)
     else:
@@ -23,6 +25,7 @@ def couvre_feu(simulation):
     simulation.time += simulation.time_increment
 
 def pas_de_politique(simulation):
+    """C'est la liberté"""
     for individu in simulation.population:
         individu.move(simulation.x_max, simulation.y_max)
     simulation.time += simulation.time_increment
