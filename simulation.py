@@ -33,7 +33,7 @@ class Simulation :
 
 
     def predict_for_all(self):
-        """prédit la position de chaque individu et crée des paires de collision si collision il y a"""
+        """Prédit la position de chaque individu et crée des paires de collision si collision il y a"""
         predictions = [self.predict(individu) for individu in self.population]  #contient les prochaines coordonnees des individus ou None s'ils touchent déjà un mur ou un coin
         n = len(self.population)
         for i in range(n-1):
@@ -47,7 +47,7 @@ class Simulation :
                         individu_j.touch = individu_i
 
     def predict(self, individu): #depend de comment l'interface graphique interprete la matrice (ne pas suppr)
-        """renvoie les prochaines coordonnees ou donne a l'individu l'obstacle qu'il rencontre (peut etre amelioree)"""
+        """Renvoie les prochaines coordonnees ou donne a l'individu l'obstacle qu'il rencontre (peut etre amelioree)"""
         pred = individu.next_position()
         x,y,r = pred[0],pred[1],individu.rayon
         if x-r < 0 and 0 <= y-r <= y+r <= self.y_max:
@@ -77,7 +77,7 @@ class Simulation :
 
 
     def advance(self):
-        """avance la simulation:prédit les collisions,update les états,applique la politique en vigueur"""
+        """Avance la simulation:prédit les collisions,update les états,applique la politique en vigueur"""
         self.predict_for_all()
         self.restate_for_all()
         if self.politique=="isolement":
@@ -95,7 +95,7 @@ class Simulation :
             self.time_increment *= var
 
     def generation(self,rayon,nb_particule,nombre_contamines,taux_respect_rules):
-
+        """Génère aléatoirement des individus dans l'environnement de simulation"""
         alg.seed()   # Initialisation de generateur aléatoire avec une graine ici de l'horloge système
         x_particules = nb_particule // 2
         y_particules = nb_particule - x_particules
@@ -114,23 +114,27 @@ class Simulation :
                 y = int(alg.uniform(0,nb_particule-i))
                 individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules,self.maladie_init)
                 individu.etat = "Infecte"
+                individu.maladie.decide_fate(individu)
+                individu.choix_respect()
                 self.population.append(individu)
                 x_array.pop(x)
                 y_array.pop(y)
             else:
                 x = int(alg.uniform(0,nb_particule-i))
                 y = int(alg.uniform(0,nb_particule-i))
-                self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules))
+                individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules)
+                individu.choix_respect()
+                self.population.append((individu))
                 x_array.pop(x)
                 y_array.pop(y)
         self.infectes = nombre_contamines
         self.sains = len(self.population)-self.infectes-self.immunises
         
-    def restate_for_all(self): #garde l'historique de tous les individus et met à jour leur état
-        
+    def restate_for_all(self): 
+        """Met à jour les états des individus de la population"""
         for individu in self.population:
             if type(individu.touch) != str and individu.touch is not None :
-                self.restate(individu)
+                self.restate_in_contact(individu)
             elif individu.touch is None :
                 if individu.etat == "Infecte":
                     temps_passe_malade = self.time - individu.maladie.hit_time
@@ -139,34 +143,27 @@ class Simulation :
                         self.immunises +=1
                         self.infectes-=1
                     else: 
-                        state = alg.binomiale(alg.gaussienne(individu.maladie.letalite) / individu.maladie.duree_transmissibilite) #letalité avec une distribution gaussienne autour de la letalité choisie
-                        if state == 1:
+                        if (individu.date_deces is not None) and (individu.date_deces < self.time) :
                             self.morts +=1
                             self.infectes -=1
                             index = self.population.index(individu)
                             self.population.pop(index)
-                    #state = alg.uniform(0,1)
-                    #if state < individu.maladie.letalite :    # Mettre letalite ici
-                        #self.morts +=1
-                        #self.infectes -=1
-                        #index = self.population.index(individu)
-                        #self.population.pop(index)
-
-    def restate(self,individu): #met à jour l'état de chaque individu en contact
+        
+    def restate_in_contact(self,individu): 
         """Met à jour l'etat de chaque individu en contact"""
-
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
             state = alg.binomiale(alg.gaussienne(individu.touch.maladie.taux_contagion))
             if state == 1 :
+                individu.etat = "Infecte"
                 maladie = individu.touch.maladie
                 individu.maladie = Maladie(self.time,maladie.taux_contagion,maladie.taux_mutation,maladie.duree_transmissibilite,maladie.letalite)
                 individu.maladie.mutate()
-                individu.etat = "Infecte"
+                individu.maladie.decide_fate(individu)
                 self.sains -= 1
                 self.infectes += 1
 
 def collision(cercle1,cercle2):
-
+    """Détecte une collision entre deux individus représentés par des cercles"""
     rayon_1 = cercle1[2]
     rayon_2 = cercle2[2]
     if alg.distance(cercle1,cercle2) < (rayon_1 + rayon_2) :

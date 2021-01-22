@@ -19,9 +19,11 @@ def gaussienne(facteur):
         return float_rand
 
 def seed():
+    """Géneration de la graine pour le générateur de variable aléatoire"""
     np.random.seed()
     
 def binomiale(p):
+    """Retourne un nombre : soit 0, soit 1"""
     return np.random.binomial(1, p)
 
 def distance(cercle_1,cercle_2):

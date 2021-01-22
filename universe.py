@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 
 
 class Universe(QtWidgets.QWidget) :
-
+    """Classe qui sert seulement à créer une scene"""
     def __init__(self,simu,refresh_time):
 
         super().__init__()
