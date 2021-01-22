@@ -22,10 +22,15 @@ class Maladie:
 
 	def decide_fate(self,individu):
 		"""Décide en fonction de la létalité si un individu doit mourir ou non lors de son temps passé malade"""
-		state = alg.binomiale(alg.gaussienne(self.letalite))
-		if state == 1 : #l'individu doit mourir
+		if self.letalite == 0:
+			individu.date_deces = None
+		elif self.letalite == 1:
 			# on tire au hasard une date entre le moment ou il devient malade et le moment théorique ou il doit guérir
-			individu.date_deces = alg.uniform(self.hit_time,self.date_retablissement) 
+			individu.date_deces = alg.uniform(self.hit_time,self.date_retablissement)
+		else:
+			state = alg.binomiale(alg.gaussienne(self.letalite))
+			if state == 1 : #l'individu doit mourir
+				individu.date_deces = alg.uniform(self.hit_time,self.date_retablissement)
 
 
 
