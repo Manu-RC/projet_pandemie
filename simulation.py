@@ -145,7 +145,7 @@ class Simulation :
                             self.infectes -=1
                             index = self.population.index(individu)
                             self.population.pop(index)
-
+        
     def restate_in_contact(self,individu): 
         """Met à jour l'etat de chaque individu en contact"""
         if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
