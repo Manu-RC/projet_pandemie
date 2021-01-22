@@ -190,7 +190,7 @@ axe_y_entree.pack()
 titre_pop_totale = "Population totale"
 titre_pop_contaminee = "Population contaminée"
 titre_vitesse = "Borne vitesse"
-titre_respect = "Respect du confinement"
+titre_respect = "Respect des lois"
 length_axe_pop = 250
 size_police_pop = 15
 police_pop = "arial"
