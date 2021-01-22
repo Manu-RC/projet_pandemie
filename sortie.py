@@ -14,6 +14,8 @@ class Sortie :
     def __init__(self,dimension_x,dimension_y,nombre_individus,rayon,refresh_time,maladie_init,nombre_contamines_init,borne_vitesse_init,taux_respect_rules):
 
         self.ui = Ui_Pandemie()
+
+        self.rayon = rayon
         
         #setup des différents paramètres de la simulation 
         self.universe_width = dimension_y
@@ -26,7 +28,6 @@ class Sortie :
         self.univers = Universe(self.simulation,refresh_time)
         self.ui.setupUi(self.univers)
         self.ui.graphicsView.setScene(self.univers.scene)
-        self.fit_scene_in_view()
         self.set_simu()
 
         #connexion du timer à l'evolution de la simulation
@@ -48,14 +49,12 @@ class Sortie :
         #connexion du bouton Graph
         self.ui.Graph_button.clicked.connect(self.open_close_history)
 
-    def fit_scene_in_view(self):
-        self.ui.graphicsView.fitInView(self.ui.graphicsView.sceneRect(), QtCore.Qt.KeepAspectRatio)
 
     def set_simu(self):
         """Initialise visuellement la simulation"""
         group = QtWidgets.QGraphicsItemGroup()
         self.univers.scene.addItem(group)
-        simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
+        simu_contour = QtCore.QRectF(-self.rayon,-self.rayon,self.universe_height+2*self.rayon,self.universe_width+2*self.rayon)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
         for individu in self.simulation.population:
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
@@ -78,7 +77,7 @@ class Sortie :
         self.ui.Compteur_immunises.display(self.simulation.immunises)
         group = QtWidgets.QGraphicsItemGroup()
         self.univers.scene.addItem(group)
-        simu_contour = QtCore.QRectF(0,0,self.universe_height,self.universe_width)
+        simu_contour = QtCore.QRectF(-self.rayon,-self.rayon,self.universe_height+2*self.rayon,self.universe_width+2*self.rayon)
         item_contour = QtWidgets.QGraphicsRectItem(simu_contour, group)
         for individu in self.simulation.population:
             bounds = QtCore.QRectF(individu.x,individu.y,individu.rayon*2,individu.rayon*2)
@@ -153,7 +152,7 @@ def open_history(simulation):
             plt.plot(time,sains,color="green")
             plt.plot(time,infectes,color="red")
             plt.plot(time,immunises,color="yellow")
-            plt.plot(time,morts,color="black")
+            plt.plot(time,morts,color="purple")
 
         plt.title = "Historique de la simulation"
         plt.xlabel("temps")

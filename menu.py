@@ -46,7 +46,7 @@ def update_rules_respect(*args):
 
 # Création de la fenêtre
 menu_principal = tkinter.Tk()
-menu_principal.title("Simulateur de pendémie")
+menu_principal.title("Simulateur de pandémie")
 menu_principal.geometry("1080x720")
 menu_principal.minsize(1050,800)
 menu_principal.iconbitmap("logo_projet.ico") #pour mettre une icone
@@ -109,16 +109,15 @@ label_lancer     = tkinter.Label(frame_lancer, text=titre_lancer, font=font_st, 
 label_lancer.pack(side=side_lancer)
 
 #Valeur initiales des variables de controle
-valeur_init_domaine = 550
-valeur_init_pop_totale = 90
-valeur_init_pop_contamine = 30
+valeur_init_domaine = 450
+valeur_init_pop_totale = 100
+valeur_init_pop_contamine = 50
 valeur_init_vitesse = 2
 valeur_rules_respect_init = 0.95
-valeur_init_hit_time = 0
 valeur_init_taux_contagion = 0.5
-valeur_init_mutation = 0.1
-valeur_init_duree_transmissibilite = 200
-valeur_init_letalite = 0.1
+valeur_init_mutation = 0.5
+valeur_init_duree_transmissibilite = 100
+valeur_init_letalite = 0.5
 
 
 # Création des variables de controles
@@ -198,10 +197,10 @@ font_pop = (police_pop,size_police_pop)
 resolution_vitesse = 0.1
 side_pop_global = "left"
 side_pop_locale = "right"
-debut_axe_pop_tot = 50
-fin_axe_pop_tot = 100
+debut_axe_pop_tot = 2
+fin_axe_pop_tot = 200
 debut_axe_pop_sick = 2
-fin_axe_pop_sick = 48
+fin_axe_pop_sick = 2
 debut_axe_vitesse = 0
 fin_axe_vitesse = 2.5
 
