@@ -200,7 +200,7 @@ side_pop_locale = "right"
 debut_axe_pop_tot = 2
 fin_axe_pop_tot = 200
 debut_axe_pop_sick = 2
-fin_axe_pop_sick = 2
+fin_axe_pop_sick = 200
 debut_axe_vitesse = 0
 fin_axe_vitesse = 2.5
 
