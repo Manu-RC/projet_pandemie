@@ -3,18 +3,14 @@ import algebre as alg
 class Maladie:
 
 	def __init__(self,hit_time,taux_contagion,taux_mutation,duree_transmissibilite,letalite):
-		"""Classe où sont stockés les parametres de la maladie
-		letalite : c'est un taux, c'est la probabilité de mourir de la maladie
-		contagion : probabilité de transmettre le virus en cas de contact avec un autre individu
-		mutation :  ...
-		"""
+		"""Classe où sont stockés les parametres de la maladie"""
 
 
 		self.hit_time = hit_time                                #le temps où l'individu a été infécté
 		self.taux_contagion = taux_contagion					#Le taux de contagion de la maladie transmise
 		self.taux_mutation = taux_mutation						#Le taux de contagion de la maladie transmise
 		self.duree_transmissibilite = duree_transmissibilite	#la durée où le virus est contagieux
-		self.letalite = letalite								#la létalité du virus 
+		self.letalite = letalite								# c'est un taux, ajuste la probabilité de mourir de la maladie
 		self.date_retablissement = self.hit_time + self.duree_transmissibilite
 
 	def mutate(self):

@@ -8,37 +8,17 @@ def lancement():
     population_malade = population_contamine.get()
     vitesse_borne_init = vitesse_init.get()
     taux_rules_respect = rules_respect.get()
-    #hit_time_init = hit_time.get()
     taux_contagion_init = taux_contagion.get()
     mutation_init = mutation.get()
     letalite_init = letalite.get()
     duree_transmisibilite_init = duree_transmisibilite.get()
-    #main.main(longueur,largeur,population,population_malade,vitesse_borne_init,taux_rules_respect,hit_time_init,taux_contagion_init,mutation_init,duree_transmisibilite_init,letalite_init)
     main.main(longueur, largeur, population, population_malade, vitesse_borne_init, taux_rules_respect, taux_contagion_init, mutation_init, duree_transmisibilite_init, letalite_init)
-
-def my_scale(fenetre, label=None, from_=None, to=None, resolution=None, length=None, variable=None, font=None, fg=None, bg=None, command=None, side=None):
-
-    scale =  tkinter.Scale(fenetre, orient='horizontal', from_=from_, to=to, resolution=resolution, length=length, label=label, variable=variable, font=font, fg=fg, bg=bg, command=command)
-    scale.pack(side=side)
-
-def my_frame(fenetre, background=None, bordure=None, relief=None,expand=None,side=None,fill=None):
-    frame = tkinter.Frame(fenetre, bg=background, bd=bordure, relief=relief)
-    frame.pack(expand=expand, fill=fill, side=side)
-    return frame
-
-def my_label(fenetre,text=None,font=None,bg=None, fg=None, expand=None, side=None, fill=None):
-    label = tkinter.Label(fenetre, text=text, font=font,bg=bg,fg=fg)
-    label.pack(expand=expand,side=side,fill=fill)
-    return label
 
 def update_population_tot(*args):
     population_totale.set(population_totale.get())
 
 def update_population_mal(*args):
     population_contamine.set(population_contamine.get())
-
-# def update_hit_time(*args):
-#     hit_time.set(hit_time.get())
 
 def update_taux_contagion(*args):
     taux_contagion.set(taux_contagion.get())
@@ -166,10 +146,6 @@ rules_respect = tkinter.DoubleVar()
 rules_respect.trace("w",update_rules_respect)
 rules_respect.set(valeur_rules_respect_init)
 
-#hit_time = tkinter.DoubleVar()
-#hit_time.trace("w",update_hit_time)
-#hit_time.set(valeur_init_hit_time)
-
 taux_contagion = tkinter.DoubleVar()
 taux_contagion.trace("w",update_taux_contagion)
 taux_contagion.set(valeur_init_taux_contagion)
@@ -238,8 +214,7 @@ pop_sick_entry.pack(side=side_pop_global)
 vitesse_init_entry.pack(side=side_pop_locale)
 rules_respect_entry.pack(side=side_pop_locale)
 
-#La maladie maladie
-#titre_hit_time = "hit time"
+#La maladie 
 titre_contagion = "Taux de contagion"
 titre_mutation = "Taux de mutation"
 titre_duree_trans = "Durée de transmissibilité"
@@ -248,14 +223,9 @@ length_maladie = 200
 size_police_maladie = 10
 police_maladie = "arial"
 font_maladie = (police_maladie, size_police_maladie)
-#debut_axe_hit_time = 0
-#fin_axe_hit_time = 5
 debut_axe_duree_trans = 0
 fin_axe_duree_trans = 200
 
-#hit_time_entry = tkinter.Scale(frame_maladie, orient='horizontal', from_=debut_axe_hit_time, to=fin_axe_hit_time, resolution=resolution_int, length=length_maladie, label=titre_hit_time,
-                                   #variable=hit_time, font=font_maladie, fg=fg_scale, bg=bg_scale, command=update_hit_time(hit_time))
-#hit_time_entry.pack()
 taux_contagion_entry = tkinter.Scale(frame_maladie, orient='horizontal', from_=debut_valeur_taux, to=fin_valeur_taux, resolution=resolution_taux, length=length_maladie, label=titre_contagion,
                                          variable=taux_contagion, font=font_maladie,fg=fg_scale, bg=bg_scale, command=update_taux_contagion(taux_contagion))
 taux_contagion_entry.pack()

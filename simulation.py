@@ -115,13 +115,16 @@ class Simulation :
                 individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules,self.maladie_init)
                 individu.etat = "Infecte"
                 individu.maladie.decide_fate(individu)
+                individu.choix_respect()
                 self.population.append(individu)
                 x_array.pop(x)
                 y_array.pop(y)
             else:
                 x = int(alg.uniform(0,nb_particule-i))
                 y = int(alg.uniform(0,nb_particule-i))
-                self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules))
+                individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules)
+                individu.choix_respect()
+                self.population.append((individu))
                 x_array.pop(x)
                 y_array.pop(y)
         self.infectes = nombre_contamines
