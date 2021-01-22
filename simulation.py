@@ -94,34 +94,36 @@ class Simulation :
         if 0.1 <= wanted_speed < 3:
             self.time_increment *= var
 
-    def generation(self,rayon,nb_particule,nombre_contamines,taux_respect_rules):
+    def generation(self,rayon,nb_particules,nombre_contamines,taux_respect_rules):
         """Génère aléatoirement des individus dans l'environnement de simulation"""
         alg.seed()   # Initialisation de generateur aléatoire avec une graine ici de l'horloge système
-        x_particules = nb_particule // 2
-        y_particules = nb_particule - x_particules
-        pas_x = int(self.x_max / (2 * x_particules))
-        pas_y = int(self.y_max / (2 * y_particules))
-        x_array = [0] * nb_particule
-        y_array = [0] * nb_particule
+        pas_x = self.x_max / nb_particules
+        pas_y = self.y_max / nb_particules
+        x_array = [0] * nb_particules
+        y_array = [0] * nb_particules
         k = 0
-        while k < nb_particule:
-            x_array[k] = alg.uniform(k * pas_x + rayon, (k+1)*pas_x - rayon)
-            y_array[k] = alg.uniform(k * pas_y + rayon, (k+1)*pas_y - rayon)
+        while k < nb_particules:
+            x_array[k] = alg.uniform(k * pas_x, (k+1)*pas_x)
+            y_array[k] = alg.uniform(k * pas_y, (k+1)*pas_y)
+
             k += 1
-        for i in range(nb_particule):
+        for i in range(nb_particules):
             if i < nombre_contamines:
-                x = int(alg.uniform(0,nb_particule-i))
-                y = int(alg.uniform(0,nb_particule-i))
+                x = int(alg.uniform(0,nb_particules-i))
+                y = int(alg.uniform(0,nb_particules-i))
                 individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules,self.maladie_init)
                 individu.etat = "Infecte"
                 individu.maladie.decide_fate(individu)
+                individu.choix_respect()
                 self.population.append(individu)
                 x_array.pop(x)
                 y_array.pop(y)
             else:
-                x = int(alg.uniform(0,nb_particule-i))
-                y = int(alg.uniform(0,nb_particule-i))
-                self.population.append(Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules))
+                x = int(alg.uniform(0,nb_particules-i))
+                y = int(alg.uniform(0,nb_particules-i))
+                individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules)
+                individu.choix_respect()
+                self.population.append((individu))
                 x_array.pop(x)
                 y_array.pop(y)
         self.infectes = nombre_contamines
