@@ -131,36 +131,42 @@ class Simulation :
         self.sains = len(self.population)-self.infectes-self.immunises
         
     def restate_for_all(self): 
-        """Met à jour les états des individus de la population"""
+        """Met à jour les états des individus de la population en cas de contact ou non"""
         for individu in self.population:
             if type(individu.touch) != str and individu.touch is not None :
-                self.restate_in_contact(individu)
+                if  individu.etat == "Sain" and individu.touch.etat == "Infecte" :
+                    self.restate_in_contact(individu)
+                else:
+                    self.restate_individu(individu)
             elif individu.touch is None :
-                if individu.etat == "Infecte":
-                    temps_passe_malade = self.time - individu.maladie.hit_time
-                    if temps_passe_malade > individu.maladie.duree_transmissibilite:
-                        individu.etat = "Immunise"
-                        self.immunises +=1
-                        self.infectes-=1
-                    else: 
-                        if (individu.date_deces is not None) and (individu.date_deces < self.time) :
-                            self.morts +=1
-                            self.infectes -=1
-                            index = self.population.index(individu)
-                            self.population.pop(index)
-        
+                self.restate_individu(individu)
+
+    def restate_individu(self,individu):
+        """Met à jour les etats des individus malades"""
+        if individu.etat == "Infecte":
+            temps_passe_malade = self.time - individu.maladie.hit_time
+            if temps_passe_malade > individu.maladie.duree_transmissibilite:
+                individu.etat = "Immunise"
+                self.immunises += 1
+                self.infectes -= 1
+            else:
+                if (individu.date_deces is not None) and (individu.date_deces < self.time):
+                    self.morts += 1
+                    self.infectes -= 1
+                    index = self.population.index(individu)
+                    self.population.pop(index)
+
     def restate_in_contact(self,individu): 
         """Met à jour l'etat de chaque individu en contact"""
-        if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
-            state = alg.binomiale(alg.gaussienne(individu.touch.maladie.taux_contagion))
-            if state == 1 :
-                individu.etat = "Infecte"
-                maladie = individu.touch.maladie
-                individu.maladie = Maladie(self.time,maladie.taux_contagion,maladie.taux_mutation,maladie.duree_transmissibilite,maladie.letalite)
-                individu.maladie.mutate()
-                individu.maladie.decide_fate(individu)
-                self.sains -= 1
-                self.infectes += 1
+        state = alg.binomiale(alg.gaussienne(individu.touch.maladie.taux_contagion))
+        if state == 1 :
+            individu.etat = "Infecte"
+            maladie = individu.touch.maladie
+            individu.maladie = Maladie(self.time,maladie.taux_contagion,maladie.taux_mutation,maladie.duree_transmissibilite,maladie.letalite)
+            individu.maladie.mutate()
+            individu.maladie.decide_fate(individu)
+            self.sains -= 1
+            self.infectes += 1
 
 def collision(cercle1,cercle2):
     """Détecte une collision entre deux individus représentés par des cercles"""
