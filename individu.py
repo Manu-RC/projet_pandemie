@@ -23,7 +23,8 @@ class Individu:
         self.maladie = maladie
         self.taux_respect_rules = taux_respect_rules
         self.date_deces = None
-        self.respect = None
+        self.respect = None #de type booléen quand il est affecté
+
 
     def __repr__(self):
         return "position x : {0:02f} \n " \
