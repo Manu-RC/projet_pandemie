@@ -94,24 +94,23 @@ class Simulation :
         if 0.1 <= wanted_speed < 3:
             self.time_increment *= var
 
-    def generation(self,rayon,nb_particule,nombre_contamines,taux_respect_rules):
+    def generation(self,rayon,nb_particules,nombre_contamines,taux_respect_rules):
         """Génère aléatoirement des individus dans l'environnement de simulation"""
         alg.seed()   # Initialisation de generateur aléatoire avec une graine ici de l'horloge système
-        x_particules = nb_particule // 2
-        y_particules = nb_particule - x_particules
-        pas_x = int(self.x_max / (2 * x_particules))
-        pas_y = int(self.y_max / (2 * y_particules))
-        x_array = [0] * nb_particule
-        y_array = [0] * nb_particule
+        pas_x = self.x_max / nb_particules
+        pas_y = self.y_max / nb_particules
+        x_array = [0] * nb_particules
+        y_array = [0] * nb_particules
         k = 0
-        while k < nb_particule:
-            x_array[k] = alg.uniform(k * pas_x + rayon, (k+1)*pas_x - rayon)
-            y_array[k] = alg.uniform(k * pas_y + rayon, (k+1)*pas_y - rayon)
+        while k < nb_particules:
+            x_array[k] = alg.uniform(k * pas_x, (k+1)*pas_x)
+            y_array[k] = alg.uniform(k * pas_y, (k+1)*pas_y)
+
             k += 1
-        for i in range(nb_particule):
+        for i in range(nb_particules):
             if i < nombre_contamines:
-                x = int(alg.uniform(0,nb_particule-i))
-                y = int(alg.uniform(0,nb_particule-i))
+                x = int(alg.uniform(0,nb_particules-i))
+                y = int(alg.uniform(0,nb_particules-i))
                 individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules,self.maladie_init)
                 individu.etat = "Infecte"
                 individu.maladie.decide_fate(individu)
@@ -120,8 +119,9 @@ class Simulation :
                 x_array.pop(x)
                 y_array.pop(y)
             else:
-                x = int(alg.uniform(0,nb_particule-i))
-                y = int(alg.uniform(0,nb_particule-i))
+                x = int(alg.uniform(0,nb_particules-i))
+                y = int(alg.uniform(0,nb_particules-i))
+
                 individu = Individu(rayon,x_array[x],y_array[y],alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),alg.uniform(-self.borne_vitesse_init,self.borne_vitesse_init),self,taux_respect_rules)
                 individu.choix_respect()
                 self.population.append((individu))
@@ -131,36 +131,42 @@ class Simulation :
         self.sains = len(self.population)-self.infectes-self.immunises
         
     def restate_for_all(self): 
-        """Met à jour les états des individus de la population"""
+        """Met à jour les états des individus de la population en cas de contact ou non"""
         for individu in self.population:
             if type(individu.touch) != str and individu.touch is not None :
-                self.restate_in_contact(individu)
+                if  individu.etat == "Sain" and individu.touch.etat == "Infecte" :
+                    self.restate_in_contact(individu)
+                else:
+                    self.restate_individu(individu)
             elif individu.touch is None :
-                if individu.etat == "Infecte":
-                    temps_passe_malade = self.time - individu.maladie.hit_time
-                    if temps_passe_malade > individu.maladie.duree_transmissibilite:
-                        individu.etat = "Immunise"
-                        self.immunises +=1
-                        self.infectes-=1
-                    else: 
-                        if (individu.date_deces is not None) and (individu.date_deces < self.time) :
-                            self.morts +=1
-                            self.infectes -=1
-                            index = self.population.index(individu)
-                            self.population.pop(index)
-        
+                self.restate_individu(individu)
+
+    def restate_individu(self,individu):
+        """Met à jour les etats des individus malades"""
+        if individu.etat == "Infecte":
+            temps_passe_malade = self.time - individu.maladie.hit_time
+            if temps_passe_malade > individu.maladie.duree_transmissibilite:
+                individu.etat = "Immunise"
+                self.immunises += 1
+                self.infectes -= 1
+            else:
+                if (individu.date_deces is not None) and (individu.date_deces < self.time):
+                    self.morts += 1
+                    self.infectes -= 1
+                    index = self.population.index(individu)
+                    self.population.pop(index)
+
     def restate_in_contact(self,individu): 
         """Met à jour l'etat de chaque individu en contact"""
-        if individu.etat == "Sain" and individu.touch.etat == "Infecte" :
-            state = alg.binomiale(alg.gaussienne(individu.touch.maladie.taux_contagion))
-            if state == 1 :
-                individu.etat = "Infecte"
-                maladie = individu.touch.maladie
-                individu.maladie = Maladie(self.time,maladie.taux_contagion,maladie.taux_mutation,maladie.duree_transmissibilite,maladie.letalite)
-                individu.maladie.mutate()
-                individu.maladie.decide_fate(individu)
-                self.sains -= 1
-                self.infectes += 1
+        state = alg.binomiale(alg.gaussienne(individu.touch.maladie.taux_contagion))
+        if state == 1 :
+            individu.etat = "Infecte"
+            maladie = individu.touch.maladie
+            individu.maladie = Maladie(self.time,maladie.taux_contagion,maladie.taux_mutation,maladie.duree_transmissibilite,maladie.letalite)
+            individu.maladie.mutate()
+            individu.maladie.decide_fate(individu)
+            self.sains -= 1
+            self.infectes += 1
 
 def collision(cercle1,cercle2):
     """Détecte une collision entre deux individus représentés par des cercles"""
