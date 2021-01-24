@@ -3,7 +3,7 @@
 ---PRESENTATION---
 
 Ce projet porte sur la simulation graphique d'une pandémie avec des individus représentés par des disques dont la
-couleur varie selon l'état (sain,malade,immunisé,contaminé) qui se déplacent en suivant une physique de chocs élastique
+couleur varie selon l'état (sain,malade,immunisé) qui se déplacent en suivant une physique de chocs élastiques
 à chaque collision avec un mur ou un autre individu. L'évolution de la simulation sera régie en grande partie par de 
 l'aléatoire, ne vous attendez pas à voir deux fois la même simulation avec des paramètres identiques (cf. utilisation).
 
